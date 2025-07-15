@@ -145,7 +145,7 @@ public:
     void Set(const cCcD_SrcCpsAttr& pSrc) {
         cM3dGCps::Set(pSrc.mCps);
     }
-    void Set(const cXyz& pStart, const cXyz& pEnd, float radius) {
+    void Set(const cXyz& pStart, const cXyz& pEnd, f32 radius) {
         cM3dGCps::Set(pStart, pEnd, radius);
     }
 
@@ -340,7 +340,15 @@ public:
     virtual cCcD_GStts* GetGStts();
     void Init(int, int, void*, fpc_ProcID);
     virtual void Ct();
+#if VERSION == VERSION_DEMO
+    void PlusCcMove(f32 x, f32 y, f32 z) {
+        m_cc_move.x += x;
+        m_cc_move.y += y;
+        m_cc_move.z += z;
+    }
+#else
     void PlusCcMove(f32, f32, f32);
+#endif
     void ClrCcMove() {
         m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
     }

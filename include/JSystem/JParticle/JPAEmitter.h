@@ -195,7 +195,7 @@ public:
 
     void setStatus(u32 status) { mFlags |= status; }
     void clearStatus(u32 status) { mFlags &= ~status; }
-    bool checkStatus(u32 status) { return mFlags & status; }
+    u32 checkStatus(u32 status) { return mFlags & status; }
     void initStatus(u32 status) { mFlags = status; }
 
     bool checkEmDataFlag(u32 mask) { return mDataFlag & mask; }
@@ -227,6 +227,9 @@ public:
     void setGlobalScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalDynamicsScale.set(scale);
         mGlobalParticleScale.set(scale);
+    }
+    void getGlobalParticleScale(JGeometry::TVec3<f32>& out) const {
+        out.set(mGlobalParticleScale);
     }
     void setGlobalParticleScale(const JGeometry::TVec3<f32>& scale) {
         mGlobalParticleScale.set(scale);
@@ -315,7 +318,6 @@ public:
     void getBasePrmColor(GXColor&) {}
     void getCurrentCreateNumber() const {}
     void getFrame() {}
-    void getGlobalParticleScale(JGeometry::TVec3<f32>&) const {}
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void isContinuousParticle() {}
     void loadTexture(u8, GXTexMapID) {}

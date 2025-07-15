@@ -87,6 +87,8 @@ public:
 
 
 
+    const static dCcD_SrcSph m_sph_src;
+
 public:
     /* 0x0290 */ s32 mType;
     /* 0x0294 */ u32 field_0x0294;
