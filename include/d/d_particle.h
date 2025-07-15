@@ -179,6 +179,8 @@ public:
     JPABaseEmitter* getEmitter() { return mpBaseEmitter; }
     void setIndirectTexData (f32 exTransY, f32 exScaleY) { mExTransY = exTransY; mExScaleY = exScaleY; }
     void setSpeed (f32 vel) { mVel = vel; }
+    void setWaterFlatY (f32 minY) { mMinY = minY; }
+    void setLimitSpeed (f32 minVel) { mMinVel = minVel; }
 
     virtual ~dPa_trackEcallBack() {}
 
