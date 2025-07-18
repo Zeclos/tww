@@ -7,6 +7,16 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_com_inf_game.h"
+#include "d/res/res_ikadah.h"
+#include "d/d_snap.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "d/d_s_play.h"
+
+// #include "weak_data_1811.h" // IWYU pragma: keep
+
+
+static cXyz m_crane_offset(0.0f, 0.0f, 0.0f);
 
 const dCcD_SrcSph daObj_Ikada_c::m_sph_src = {
     // dCcD_SrcGObjInf
@@ -36,11 +46,6 @@ const dCcD_SrcSph daObj_Ikada_c::m_sph_src = {
         /* Radius */ 75.0f,
     },
 };
-
-#include "d/d_com_inf_game.h"
-#include "d/res/res_ikadah.h"
-
-#include "d/d_s_play.h"
 
 const char daObj_Ikada_c::m_arc_name[] = "IkadaH";
 
@@ -140,12 +145,52 @@ void daObj_Ikada_c::_nodeControl(J3DNode* node, J3DModel* model) {
 }
 
 /* 00000458-00000494       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-void pathMove_CB(cXyz*, cXyz*, cXyz*, void*) {
-    /* Nonmatching */
+static BOOL pathMove_CB(cXyz* curPos, cXyz* curPntPos, cXyz* nextPntPos, void* i_this) {
+    return static_cast<daObj_Ikada_c*>(i_this)->_pathMove(curPos, curPntPos, nextPntPos);
 }
 
 /* 00000494-000007A0       .text _pathMove__13daObj_Ikada_cFP4cXyzP4cXyzP4cXyz */
-void daObj_Ikada_c::_pathMove(cXyz*, cXyz*, cXyz*) {
+BOOL daObj_Ikada_c::_pathMove(cXyz* pDst, cXyz* pP0, cXyz* pP1) {
+    u8 curPathPoint = mCurPathPoint;
+    s16 numPnts = mpPath->m_num -1;
+    if(mpPath->m_points[curPathPoint +1 &   (curPathPoint < numPnts)].mArg3 == 0xFF) {
+        mbCraneMode = 0;
+    } else {
+        mbCraneMode = 1;
+    }
+    mCurPathP0.x = pP0->x;
+    mCurPathP0.y = pP0->y;
+    mCurPathP0.z = pP0->z;
+    mCurPathP0.y = current.pos.y;
+    mCurPathP1.x = pP1->x;
+    mCurPathP1.y = pP1->y;
+    mCurPathP1.z = pP1->z;
+    mCurPathP1.y = current.pos.y;
+
+    cXyz delta = mCurPathP1 - mCurPathP0;
+    if (!delta.normalizeRS()) {
+        return TRUE;
+    }
+
+    s16 targetAngleY = cM_atan2s(delta.x, delta.z);
+    numPnts = cLib_addCalcAngleS(&current.angle.y, targetAngleY, 8, 0x200, 8);
+    f32 step = speedF * std::fabsf(cM_scos(numPnts));
+    cLib_chasePosXZ(pDst, mCurPathP1, step);
+    
+    cXyz temp = *pDst - mCurPathP0;
+    f32 temp2 = step * (g_regHIO.mChild[0xc].mFloatRegs[2] + 1.0f);
+    if (temp.abs() >= (step * (g_regHIO.mChild[0xc].mFloatRegs[2] + 1.0f))) {
+        cXyz temp2 = *pDst - mCurPathP1;
+        if(temp2.abs() == 0.0f) {
+            return FALSE;
+        }
+
+    }
+    if(mbCraneMode != 0) {
+        modeProcInit(5);
+        return TRUE;
+    }
+    return FALSE;
     /* Nonmatching */
 }
 
@@ -166,6 +211,11 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 00000A20-00000AA4       .text setCollision__13daObj_Ikada_cFv */
 void daObj_Ikada_c::setCollision() {
+    if (!mbIsLinkRiding && !dComIfGp_checkPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e)) {
+    mSph.SetR(l_HIO.field_0x9C * scale.x);
+    mSph.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mSph);
+  }
     /* Nonmatching */
 }
 
@@ -176,15 +226,21 @@ bool daObj_Ikada_c::checkTgHit() {
 
 /* 00000E38-00000F04       .text pathMove__13daObj_Ikada_cFv */
 void daObj_Ikada_c::pathMove() {
+    cLib_addCalc2(&speedF, mVelocityFwdTarget, 0.1f, 2.0f);
+    dLib_pathMove(&mPathPosTarget, &mCurPathPoint, mpPath, speedF, &pathMove_CB, this);
+
+    cLib_addCalcPosXZ2(&current.pos, mPathPosTarget, g_regHIO.mChild[0xc].mFloatRegs[0] + 0.01f, speedF);
+    if(speedF != 0.0f && mVelocityFwdTarget != 0.0f) {
+        cLib_addCalcAngleS2(&shape_angle.y, cLib_targetAngleY(&current.pos, &mPathPosTarget), 8, 0x100);
+    }
     /* Nonmatching */
 }
 
 /* 00000F04-00000FBC       .text HandleRight__13daObj_Ikada_cFv */
 void daObj_Ikada_c::HandleRight() {
     field_0x1154 += l_HIO.field_0x20;
-    J3DFrameCtrl* frameCtrl = mBckAnm.getFrameCtrl();
-    if (field_0x1154 <= frameCtrl->getStart()) {
-        field_0x1154 = frameCtrl->getEnd();
+    if (field_0x1154 >= mBckAnm.getEndFrame()) {
+        field_0x1154 = mBckAnm.getStartFrame();
     }
     /* Nonmatching */
 }
@@ -192,9 +248,8 @@ void daObj_Ikada_c::HandleRight() {
 /* 00000FBC-00001074       .text HandleLeft__13daObj_Ikada_cFv */
 void daObj_Ikada_c::HandleLeft() {
     field_0x1154 -= l_HIO.field_0x20;
-    J3DFrameCtrl* frameCtrl = mBckAnm.getFrameCtrl();
-    if (field_0x1154 <= frameCtrl->getStart()) {
-        field_0x1154 = frameCtrl->getEnd();
+    if (field_0x1154 <= mBckAnm.getStartFrame()) {
+        field_0x1154 = mBckAnm.getEndFrame();
     }
     /* Nonmatching */
 }
@@ -734,6 +789,11 @@ void daObj_Ikada_c::modeCraneWait() {
 
 /* 00002C08-00002C60       .text modePathMoveInit__13daObj_Ikada_cFv */
 void daObj_Ikada_c::modePathMoveInit() {
+  if(cM_rndF(1.0f) < 0.5) {
+    field_0x1168 = 0;
+  } else {
+    field_0x1168 = 1;
+  }
     /* Nonmatching */
 }
 
@@ -774,7 +834,7 @@ void daObj_Ikada_c::modeStop() {
 
 /* 00002F04-00002F10       .text modePathMoveTerryInit__13daObj_Ikada_cFv */
 void daObj_Ikada_c::modePathMoveTerryInit() {
-    /* Nonmatching */
+    mTimer = 10;
 }
 
 /* 00002F10-00003228       .text modePathMoveTerry__13daObj_Ikada_cFv */
@@ -1075,7 +1135,51 @@ void daObj_Ikada_c::debugDraw() {
 }
 
 /* 00003CD4-00003EE0       .text _draw__13daObj_Ikada_cFv */
-bool daObj_Ikada_c::_draw() {
+BOOL daObj_Ikada_c::_draw() {
+    static GXColor rope_color = {0xC8, 0x96, 0x32, 0xFF};
+    GXColor color;
+    color.r = 0xEB;
+    color.g = 0x7D;
+    color.b = 0;
+    color.a = 0;
+
+    if (l_HIO.mbDebugDraw != 0) {
+        debugDraw();
+    }
+
+    if(mFireParticle.getEmitter()) {
+        dComIfGd_setAlphaModelColor(color);
+        dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mLightMtx, field_0x0508);
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    dComIfGd_setListBG();
+    
+    if(isCrane()) {
+        mBckAnm.entry(mpModel->getModelData());
+        mDoExt_modelUpdateDL(mpModel);
+        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+    } else {
+        mDoExt_modelUpdateDL(mpModel);
+    }
+
+    dComIfGd_setList();
+    if(isCrane()) {
+        if (mRopeCnt >= 2) {
+            mRopeLine.update((u16)mRopeCnt, 5.0f, rope_color, 0, &tevStr);
+            dComIfGd_set3DlineMat(&mRopeLine);
+        }
+        g_env_light.setLightTevColorType(mpRopeEnd, &tevStr);
+        mDoExt_modelUpdateDL(mpRopeEnd);
+
+    }
+    if(isCrane()) {
+        dSnap_RegistFig(DSNAP_TYPE_UNK83, this, 1.0f, 1.0f, 1.0f);
+
+    }
+    return TRUE;
+    
     /* Nonmatching */
 }
 
@@ -1097,13 +1201,186 @@ void daObj_Ikada_c::getArg() {
 
 /* 00003F34-00004838       .text createInit__13daObj_Ikada_cFv */
 void daObj_Ikada_c::createInit() {
+    static cXyz flag_offset[5];
+
+    static int flag_scale[5] = {
+        0x3E4CCCCD,
+        0x00000000,
+        0x00000000,
+        0x00000000,
+        0x3DF5C28F
+    };
+
+    static int param[5] = {	
+        0x00000004,
+        0x00000004,
+        0x00000004,
+        0x00000004,
+        0x02000000
+    };
+
     mInitPos = current.pos;
-    f32 temp = cM_rndF(120.0f);
-    f32 temp2 = temp + 240.f;
-    mStopTimer = temp2;
-    if(mType = 1 || mType == 2 || mType == 3) {
-       
+    mStopTimer = cM_rndF(120.0f) + 240.f;
+
+    if(mType == 1 || mType == 2 || mType == 0) {
+        fopAcM_OnStatus(this, fopAcStts_UNK4000_e); // prob wrong
     }
+
+    mPathPosTarget = current.pos;
+
+    if(mPathId == 0xff || (!isCrane() && mType != 1 && mType == 3)) {
+        mpPath = dPath_GetRoomPath(mPathId, current.roomNo);
+        if (isCrane()) {
+            modeProcInit(8);
+        }
+    } else {
+        modeProcInit(0);
+    }
+
+    if(mType == 1 || mType == 3) {
+        modeProcInit(0xb);
+    }
+
+    if (isCrane()) {
+        // maybe missing enum
+        mSvId[0] = fopAcM_createChild("Sv0", fopAcM_GetID(this), -1, &current.pos, current.roomNo, 0,0,0);
+        mSvId[1] = fopAcM_createChild("Sv1", fopAcM_GetID(this), -1, &current.pos, current.roomNo, 0,0,0);
+        mSvId[2] = fopAcM_createChild("Sv2", fopAcM_GetID(this), -1, &current.pos, current.roomNo, 0,0,0);
+        mSvId[3] = fopAcM_createChild("Sv3", fopAcM_GetID(this), -1, &current.pos, current.roomNo, 0,0,0);
+    }
+
+    mLightRotY = cM_rndF(32768.0f);
+    mLightRotX = cM_rndF(32768.0f);
+    current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
+    mpBgW->SetGrpRoomInf(fopAcM_GetRoomNo(this));
+
+    if (!isCrane()) {
+        setMtx();
+        mpBgW->Move();
+    }
+
+    dComIfG_Bgsp()->Regist(mpBgW, this); // maybe wrong
+
+    if(mType == 1) {
+        mpBgW->mpRideCb = ride_CB;
+    }
+    if(mType == 1) {
+        mpBgW->SetCrrFunc(&dBgS_MoveBGProc_TypicalRotY);
+    } else {
+        mpBgW->SetCrrFunc(&dBgS_MoveBGProc_Typical);
+    }
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
+    mObjAcch.SetWallNone();
+    mObjAcch.SetRoofNone();
+
+    if(!isCrane() && !isBonbori()) {
+            createWave();
+
+
+    }
+
+    if(isBonbori()) {
+        dKy_plight_set(&mPLight);
+    }
+
+    fopAcM_SetGravity(this, 0.0f);
+    fopAcM_posMoveF(this, NULL);
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx()); // probs
+
+    f32 temp = scale.x;
+    f32 temp2 = scale.x * 1000.0f;
+    fopAcM_setCullSizeBox(this, temp* -1000.0f, temp* -50.0f, temp* -1000.0f, temp2, temp2, temp2);
+    fopAcM_setCullSizeFar(this, 10.0f);
+
+    if(isFlag()){
+
+        /*         static cXyz flag_offset[5] = {
+            cXyz(0.0f, 700.0f, 0.0f),
+            cXyz(0.0f, 0.0f, 0.0f),
+            cXyz(0.0f, 0.0f, 0.0f),
+            cXyz(0.0f, 0.0f, 0.0f),
+            cXyz(100.0f, 530.0f, 0.0f),
+        };*/
+        
+        flag_offset[0].x = 0.0f;
+        flag_offset[0].y = 700.0f;
+        flag_offset[0].z = 0.0f;
+
+        flag_offset[1].x = 0.0f;
+        flag_offset[1].y = 0.0f;
+        flag_offset[1].z = 0.0f;
+
+        flag_offset[2].x = 0.0f;
+        flag_offset[2].y = 0.0f;
+        flag_offset[2].z = 0.0f;
+
+        flag_offset[3].x = 0.0f;
+        flag_offset[3].y = 0.0f;
+        flag_offset[3].z = 0.0f;
+
+        flag_offset[4].x = 100.0f;
+        flag_offset[4].y = 530.0f;
+        flag_offset[4].z = 0.0f;
+    }
+
+    mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, param[mType], &current.pos, fopAcM_GetRoomNo(this), &current.angle, NULL);
+    mFlagOffset = flag_offset[mType];
+    mFlagScale = flag_scale[mType];
+
+    mWave.mAnimX = cM_rndF(32768.0f);
+    mWave.mAnimZ = cM_rndF(32768.0f);
+
+    if(isCrane()) {
+        mpModel->calc();
+        mRopeCnt = 0xf;
+        int temp8 = mRopeCnt;
+
+        cXyz* temp3 = &mRopeLineSegments[temp8 -1];
+        cMtx_copy(model->getAnmMtx(1), mDoMtx_stack_c::now);
+        mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
+        temp3->x = mDoMtx_stack_c::now[0][3];
+        temp3->y = mDoMtx_stack_c::now[1][3];
+        temp3->z = mDoMtx_stack_c::now[2][3];
+
+        cXyz temp4(0.0f, -1.0f, 0.0f);
+        // PSVECScale()
+        cXyz* temp5 = &mRopeLineSegments[temp8 -2];
+
+        for (temp8 = mRopeCnt -2; temp8 > -1; temp8--) {
+            // temp3[-1] = temp3 - temp4;
+            
+            // temp5 = cXyz::Zero;
+            // temp5--;
+            // temp3--;
+        }
+        temp3 = &mRopeLineSegments[temp8];
+        cXyz temp9 = *temp3;
+
+        temp8 = cM_ssin(shape_angle.y);
+        f32 local_58 = cM_scos(temp8) * temp9.x - cM_ssin(temp8) * temp9.z;
+        f32 local_54 = temp9.y;
+        f32 local_50 = cM_ssin(temp8) * temp9.x + cM_scos(temp8) * temp9.z;
+        mDoMtx_stack_c::transM(temp3->x,temp3->y,temp3->z);
+        f32 fVar10 = local_54 * local_54 + local_50 * local_50;
+        
+
+        mDoMtx_stack_c::ZXYrotM(cM_atan2s(-local_58,fVar10), shape_angle.y, cM_atan2s(local_50,local_54));
+
+        mDoMtx_stack_c::XrotM(-0x4000);
+        field_0x0474.x = mDoMtx_stack_c::now[0][3];
+        field_0x0474.y = mDoMtx_stack_c::now[1][3];
+        field_0x0474.z = mDoMtx_stack_c::now[2][3];
+        mDoMtx_stack_c::copy(mpRopeEnd->getBaseTRMtx());
+
+        //woof
+
+    }
+    mStts.Init(0xFF, 0xFF, this);
+    mSph.Set(m_sph_src);
+    mSph.SetStts(&mStts);
+
+
     /* Nonmatching */
 }
 

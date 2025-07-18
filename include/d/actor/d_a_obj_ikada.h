@@ -32,7 +32,7 @@ public:
     void setStop() {}
 
     void _nodeControl(J3DNode*, J3DModel*);
-    void _pathMove(cXyz*, cXyz*, cXyz*);
+    BOOL _pathMove(cXyz*, cXyz*, cXyz*);
     void _ride(fopAc_ac_c*);
     void setCollision();
     bool checkTgHit();
@@ -74,7 +74,7 @@ public:
     void epProc();
     bool _execute();
     void debugDraw();
-    bool _draw();
+    BOOL _draw();
     void getArg();
     void createInit();
     BOOL _createHeap();
@@ -90,7 +90,7 @@ public:
     const static dCcD_SrcSph m_sph_src;
 
 public:
-    /* 0x0290 */ s32 mType;
+       /* 0x0290 */ s32 mType;
     /* 0x0294 */ u32 field_0x0294;
     /* 0x0298 */ u32 field_0x0298;
     /* 0x029C */ u32 field_0x029C;
@@ -98,7 +98,7 @@ public:
     /* 0x02A4 */ u8 mPathId;
     /* 0x02A5 */ u8 field_0x02A5[0x02A8 - 0x02A5];
     /* 0x02A8 */ cXyz mCurPathP0;
-    /* 0x02B4 */ u8 mCurPathPoint;
+    /* 0x02B4 */ s8 mCurPathPoint;
     /* 0x02B5 */ u8 field_0x02B5[0x02B8 - 0x02B5];
     /* 0x02B8 */ dPath* mpPath;
     /* 0x02BC */ u8 field_0x02BC[0x02C0 - 0x02BC];
@@ -161,7 +161,7 @@ public:
     /* 0x07D8 */ int mRopeCnt;
     /* 0x07DC */ cXyz mRopeLineSegments[200];
     /* 0x113C */ csXyz mJointRot[4];
-    /* 0x1154 */ uint field_0x1154;
+    /* 0x1154 */ int field_0x1154;
     /* 0x1158 */ s16 field_0x1158;
     /* 0x115A */ s16 field_0x115A;
     /* 0x115C */ s16 field_0x115C;
