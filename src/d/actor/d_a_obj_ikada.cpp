@@ -13,7 +13,7 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_s_play.h"
 
-// #include "weak_data_1811.h" // IWYU pragma: keep
+#include "weak_data_1811.h" // IWYU pragma: keep
 
 
 static cXyz m_crane_offset(0.0f, 0.0f, 0.0f);
