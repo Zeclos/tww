@@ -3,6 +3,7 @@
 // Translation Unit: d_throwstone.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_throwstone.h"
 #include "d/res/res_aisi.h"
 #include "f_op/f_op_actor.h"
@@ -55,7 +56,7 @@ cPhs_State daThrowstone_c::_create() {
 }
 
 /* 8023B5DC-8023B6DC       .text daThrowstoneCreate__FPv */
-static s32 daThrowstoneCreate(void* ptr) {
+static cPhs_State daThrowstoneCreate(void* ptr) {
     return ((daThrowstone_c*)ptr)->_create();
 }
 

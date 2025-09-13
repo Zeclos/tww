@@ -3,6 +3,7 @@
  * Enemy - Gyorg
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_gy.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -31,10 +32,10 @@ static dCcD_SrcSph l_sph_head_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 180.0f,
-    },
+    }},
 };
 
 
@@ -61,10 +62,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 180.0f,
-    },
+    }},
 };
 
 
@@ -91,11 +92,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
-    },
+    }},
 };
 
 
@@ -310,7 +311,7 @@ bool daGy_c::_delete() {
 }
 
 /* 00005AD4-00005AF4       .text daGyCreate__FPv */
-static s32 daGyCreate(void* i_this) {
+static cPhs_State daGyCreate(void* i_this) {
     return ((daGy_c*)i_this)->_create();
 }
 

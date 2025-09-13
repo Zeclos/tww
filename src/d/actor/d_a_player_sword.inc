@@ -10,6 +10,7 @@
  * a function from this file.
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_boko.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
@@ -1351,23 +1352,23 @@ BOOL daPy_lk_c::procCutTurn_init(int param_0) {
         setBlurPosResource(LKANM__CUTTURN_POS);
     } else {
         daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
-        u32 uVar5;
+        u32 boko_type;
         if (boko == NULL) {
-            uVar5 = 0;
+            boko_type = daBoko_c::Type_BOKO_STICK_e;
             mAtCyl.SetAtAtp(1);
         } else {
-            uVar5 = fopAcM_GetParam(boko);
+            boko_type = fopAcM_GetParam(boko);
             mAtCyl.SetAtAtp(boko->getAtPoint());
         }
-        if (uVar5 == 0) {
+        if (boko_type == daBoko_c::Type_BOKO_STICK_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x60;
-        } else if (uVar5 == 1) {
+        } else if (boko_type == daBoko_c::Type_MACHETE_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x64;
-        } else if (uVar5 == 2) {
+        } else if (boko_type == daBoko_c::Type_STALFOS_MACE_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x68;
-        } else if (uVar5 == 3) {
+        } else if (boko_type == daBoko_c::Type_DARKNUT_SWORD_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x6C;
-        } else if (uVar5 == 4) {
+        } else if (boko_type == daBoko_c::Type_MOBLIN_SPEAR_e) {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x70;
         } else {
             m35A4 = daPy_HIO_cutTurn_c0::m.field_0x74;
@@ -1567,7 +1568,7 @@ BOOL daPy_lk_c::procCutRoll() {
             shape_angle.y = current.angle.y;
         }
         sVar3 = current.angle.y - uVar1;
-        if (dComIfGp_event_runCheck() != 0) {
+        if (dComIfGp_event_runCheck()) {
             if (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e) {
                 m34D0 = 0;
             } else {
@@ -1587,7 +1588,7 @@ BOOL daPy_lk_c::procCutRoll() {
         } else if (cLib_addCalc(&mVelocity, 0.0f, 0.1f, 2.5f, 1.0f) < 0.5f) {
             shape_angle.y = shape_angle.y + m34EC;
             current.angle.y = shape_angle.y;
-            if (dComIfGp_event_runCheck() != 0 && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
+            if (dComIfGp_event_runCheck() && (mDemo.getDemoMode() != daPy_demo_c::DEMO_CUT_ROLL_e)) {
                 procWait_init();
             } else {
                 procCutRollEnd_init();

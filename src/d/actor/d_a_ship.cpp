@@ -3,6 +3,7 @@
  * King of Red Lions
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ship.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -24,25 +25,62 @@
 #include "d/actor/d_a_grid.h"
 #include "d/res/res_ship.h"
 
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 static char l_arcName[] = "Ship";
 static Vec l_cannon_top = {85.0f, 0.0f, 10.0f};
 static Vec l_tiller_top_offset = {34.0f, 0.0f, 15.0f};
 
+class daShip_HIO_c0 {
+public:
+    ~daShip_HIO_c0() {}
 
-const s16 daShip_HIO_c0::tiller_speed = 0x02BC;
-const s16 daShip_HIO_c0::cannon_no_gravity_timer = 0x0008;
-const s16 daShip_HIO_c0::throw_start_angle_speed = 0x1194;
-const s16 daShip_HIO_c0::throw_return_angle_speed = 0x0E10;
-const f32 daShip_HIO_c0::paddle_speed = 10.0f;
-const f32 daShip_HIO_c0::min_speed = 0.0f;
-const f32 daShip_HIO_c0::wind_inc_speed = 55.0f;
-const f32 daShip_HIO_c0::r_inc_speed = 0.0f;
-const f32 daShip_HIO_c0::r_wind_inc_speed = 0.0f;
-const f32 daShip_HIO_c0::fly_rate = 0.6f;
-const f32 daShip_HIO_c0::wind_rate = 0.5f;
+    /* 0x00 */ static const s16 tiller_speed;
+    /* 0x02 */ static const s16 cannon_no_gravity_timer;
+    /* 0x04 */ static const s16 throw_start_angle_speed;
+    /* 0x06 */ static const s16 throw_return_angle_speed;
+    /* 0x08 */ static const f32 paddle_speed;
+    /* 0x0C */ static const f32 min_speed;
+    /* 0x10 */ static const f32 wind_inc_speed;
+    /* 0x14 */ static const f32 r_inc_speed;
+    /* 0x18 */ static const f32 r_wind_inc_speed;
+    /* 0x1C */ static const f32 fly_rate;
+    /* 0x20 */ static const f32 wind_rate;
+    /* 0x24 */ static const f32 ef_dis_speed;
+    /* 0x28 */ static const f32 ef_speed_rate;
+    /* 0x2C */ static const f32 ef_front_x;
+    /* 0x30 */ static const f32 ef_front_y;
+    /* 0x34 */ static const f32 ef_front_z;
+    /* 0x38 */ static const f32 ef_back_x;
+    /* 0x3C */ static const f32 ef_back_y;
+    /* 0x40 */ static const f32 ef_back_z;
+    /* 0x44 */ static const f32 ef_sp_max_speed;
+    /* 0x48 */ static const f32 ef_pitch;
+    /* 0x4C */ static const f32 ef_ind_scroll;
+    /* 0x50 */ static const f32 ef_ind_scale;
+    /* 0x54 */ static const f32 cannon_speed;
+    /* 0x58 */ static const f32 cannon_gravity;
+    /* 0x5C */ static const f32 whirl_init_speed;
+    /* 0x60 */ static const f32 whirl_inc_speed;
+    /* 0x64 */ static const f32 whirl_distance;
+    /* 0x68 */ static const f32 tornado_init_speed;
+    /* 0x6C */ static const f32 tornado_inc_speed;
+    /* 0x70 */ static const f32 tornado_distance;
+    /* 0x74 */ static const f32 tornado_pull_speed;
+    /* 0x78 */ static const f32 throw_start_speedF;
+    /* 0x7C */ static const f32 throw_start_speed_y;
+};
+
+// TODO: Use these named constants in the code instead of literals
+const s16 daShip_HIO_c0::tiller_speed = 700;
+const s16 daShip_HIO_c0::cannon_no_gravity_timer = 8;
+const s16 daShip_HIO_c0::throw_start_angle_speed = 4500;
+const s16 daShip_HIO_c0::throw_return_angle_speed = 3600;
+const f32 daShip_HIO_c0::paddle_speed = 10.0f; // TODO
+const f32 daShip_HIO_c0::min_speed = 0.0f; // TODO
+const f32 daShip_HIO_c0::wind_inc_speed = 55.0f; // TODO
+const f32 daShip_HIO_c0::r_inc_speed = 0.0f; // TODO
+const f32 daShip_HIO_c0::r_wind_inc_speed = 0.0f; // TODO
+const f32 daShip_HIO_c0::fly_rate = 0.6f; // TODO
+const f32 daShip_HIO_c0::wind_rate = 0.5f; // TODO
 const f32 daShip_HIO_c0::ef_dis_speed = 2.0f;
 const f32 daShip_HIO_c0::ef_speed_rate = 0.7f;
 const f32 daShip_HIO_c0::ef_front_x = -80.0f;
@@ -52,23 +90,23 @@ const f32 daShip_HIO_c0::ef_back_x = -40.0f;
 const f32 daShip_HIO_c0::ef_back_y = -100.0f;
 const f32 daShip_HIO_c0::ef_back_z = -350.0f;
 const f32 daShip_HIO_c0::ef_sp_max_speed = 30.0f;
-const f32 daShip_HIO_c0::ef_pitch = 1.0f;
+const f32 daShip_HIO_c0::ef_pitch = 1.0f; // TODO
 const f32 daShip_HIO_c0::ef_ind_scroll = -0.04f;
 const f32 daShip_HIO_c0::ef_ind_scale = 4.0f;
 const f32 daShip_HIO_c0::cannon_speed = 110.0f;
 const f32 daShip_HIO_c0::cannon_gravity = -2.5f;
-const f32 daShip_HIO_c0::whirl_init_speed = 10.0f;
-const f32 daShip_HIO_c0::whirl_inc_speed = 30.0f;
+const f32 daShip_HIO_c0::whirl_init_speed = 10.0f; // TODO
+const f32 daShip_HIO_c0::whirl_inc_speed = 30.0f; // TODO
 const f32 daShip_HIO_c0::whirl_distance = 4000.0f;
-const f32 daShip_HIO_c0::tornado_init_speed = 30.0f;
-const f32 daShip_HIO_c0::tornado_inc_speed = 40.0f;
+const f32 daShip_HIO_c0::tornado_init_speed = 30.0f; // TODO
+const f32 daShip_HIO_c0::tornado_inc_speed = 40.0f; // TODO
 const f32 daShip_HIO_c0::tornado_distance = 6000.0f;
-const f32 daShip_HIO_c0::tornado_pull_speed = 5.0f;
+const f32 daShip_HIO_c0::tornado_pull_speed = 5.0f; // TODO
 const f32 daShip_HIO_c0::throw_start_speedF = 150.0f;
 const f32 daShip_HIO_c0::throw_start_speed_y = 50.0f;
 
 static daShip_HIO_c0 l_HIO;
-cXyz daShip_c::l_rope_base_vec(0.0f, -10.0f, 0.0f);
+static cXyz l_rope_base_vec(0.0f, -10.0f, 0.0f);
 
 /* 000000EC-0000023C       .text bodyJointCallBack__8daShip_cFi */
 BOOL daShip_c::bodyJointCallBack(int jno) {
@@ -852,7 +890,7 @@ f32 daShip_c::getWaterY() {
         waterY = m03F4;
 #else
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-        if (link && link->mDemo.getDemoMode() == daPy_demo_c::DEMO_UNK_068_e ) {
+        if (link && link->checkBowMiniGame()) {
             waterY = 0.0f;
         }
         else {
@@ -1353,7 +1391,7 @@ void daShip_c::setSelfMove(int param_1) {
     else {
         sVar2 = 0;
     }
-    cLib_addCalcAngleS(&m0366, sVar2, 4, 700, 0x100);
+    cLib_addCalcAngleS(&m0366, sVar2, 4, l_HIO.tiller_speed, 0x100);
     setMoveAngle(m0366);
     if (!checkStateFlg(daSFLG_FLY_e)) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e) || dComIfGp_event_runCheck() || daPy_getPlayerLinkActorClass()->checkNoControll()) {
@@ -1579,7 +1617,7 @@ BOOL daShip_c::procSteerMove() {
     if (checkNextMode(MODE_STEER_MOVE_e)) {
         return TRUE;
     }
-    cLib_addCalcAngleS(&m0366, mStickMVal * 8192.0f * -cM_ssin(mStickMAng), 4, 700, 0x100);
+    cLib_addCalcAngleS(&m0366, mStickMVal * 8192.0f * -cM_ssin(mStickMAng), 4, l_HIO.tiller_speed, 0x100);
     if (!checkStateFlg(daSFLG_FLY_e)) {
         setMoveAngle(m0366);
     }
@@ -2048,7 +2086,7 @@ BOOL daShip_c::procToolDemo() {
             else {
                 angleDiff = 0;
             }
-            cLib_addCalcAngleS(&m0366, angleDiff, 4, 700, 0x100);
+            cLib_addCalcAngleS(&m0366, angleDiff, 4, l_HIO.tiller_speed, 0x100);
             setControllAngle(getAimControllAngle(prevShapeAngleY));
         }
     }
@@ -2182,7 +2220,7 @@ BOOL daShip_c::procZevDemo() {
                 fVar17 = local_70.absXZ();
 
                 if (!dComIfGp_evmng_getMyFloatP(mEvtStaffId, "rad")) {
-                    JUT_ASSERT(VERSION_SELECT(3722, 3741, 3741, 3741), 0);
+                    JUT_ASSERT(DEMO_SELECT(3722, 3741), 0);
                 }
 
                 fVar3 = *dComIfGp_evmng_getMyFloatP(mEvtStaffId, "rad");
@@ -2250,7 +2288,7 @@ BOOL daShip_c::procZevDemo() {
                     sVar5 = 0;
                 }
 
-                cLib_addCalcAngleS(&m0366, sVar5, 4, 700, 0x100);
+                cLib_addCalcAngleS(&m0366, sVar5, 4, l_HIO.tiller_speed, 0x100);
                 setControllAngle(getAimControllAngle(sVar15));
             }
             else {
@@ -2313,20 +2351,20 @@ BOOL daShip_c::procZevDemo() {
             }
         }
         else if (m0351 == DEMO_THROW_e) {
-            speedF = 150.0f;
+            speedF = l_HIO.throw_start_speedF;
             speedP = dComIfGp_evmng_getMyFloatP(mEvtStaffId, "gravity");
             if (speedP) {
                 gravity = *speedP;
             }
             
-            speed.y = 50.0f;
+            speed.y = l_HIO.throw_start_speed_y;
             onStateFlg(daSFLG_FLY_e);
 
             if (angleP) {
                 current.angle.y = (s16)*angleP;
             }
 
-            shape_angle.y += 4500;
+            shape_angle.y += l_HIO.throw_start_angle_speed;
             dComIfGp_evmng_cutEnd(mEvtStaffId);
         }
         else if (m0351 == DEMO_HWARP_UP_e) {
@@ -2866,7 +2904,7 @@ BOOL daShip_c::procStartModeThrow_init() {
     if (m0392 != SHIP_BCK_FN_MAST_OFF2) {
         setPartOffAnime();
     }
-    m03A6 = 3600;
+    m03A6 = l_HIO.throw_return_angle_speed;
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(current.pos.x + cM_scos(current.angle.y) * 300.0f, 
@@ -2992,19 +3030,19 @@ void daShip_c::setEffectData(float param_1, short param_2) {
         }
     }
 
-    mTrack.setIndirectTexData(-0.04f, 4.0f);
+    mTrack.setIndirectTexData(l_HIO.ef_ind_scroll, l_HIO.ef_ind_scale);
     mTrack.setSpeed(mFwdVel);
 
     if (mFwdVel >= 0.0f) {
-        mWaveR.setSpeed(0.7f);
-        mWaveL.setSpeed(0.7f);
+        mWaveR.setSpeed(l_HIO.ef_speed_rate);
+        mWaveL.setSpeed(l_HIO.ef_speed_rate);
     }
     else {
-        mWaveR.setSpeed(-0.7f);
-        mWaveL.setSpeed(-0.7f);
+        mWaveR.setSpeed(-l_HIO.ef_speed_rate);
+        mWaveL.setSpeed(-l_HIO.ef_speed_rate);
     }
 
-    fVar1 = (s16)(shape_angle.z - param_2) / 16384.0f;
+    fVar1 = (s16)(shape_angle.z - param_2) / (f32)0x4000;
 
     if (fVar1 > 0.3f) {
         fVar1 = 0.3f;
@@ -3017,21 +3055,21 @@ void daShip_c::setEffectData(float param_1, short param_2) {
     mWaveL.setPitch(1.0f - fVar1);
 
     mSplash.setSpeed(mFwdVel);
-    mSplash.setMaxSpeed(30.0f);
+    mSplash.setMaxSpeed(l_HIO.ef_sp_max_speed);
     
     cXyz anchorPos1;
     cXyz anchorPos2;
 
-    anchorPos1.set(-80.0f, -50.0f, -150.0f);
-    anchorPos2.set(-40.0f, -100.0f, -350.0f);
+    anchorPos1.set(l_HIO.ef_front_x, l_HIO.ef_front_y, l_HIO.ef_front_z);
+    anchorPos2.set(l_HIO.ef_back_x, l_HIO.ef_back_y, l_HIO.ef_back_z);
     mWaveR.setAnchor(&anchorPos1, &anchorPos2);
 
     anchorPos1.x *= -1.0f;
     anchorPos2.x *= -1.0f;
     mWaveL.setAnchor(&anchorPos1, &anchorPos2);
 
-    mWaveL.setMaxDisSpeed(2.0f);
-    mWaveR.setMaxDisSpeed(2.0f);
+    mWaveL.setMaxDisSpeed(l_HIO.ef_dis_speed);
+    mWaveR.setMaxDisSpeed(l_HIO.ef_dis_speed);
 
     mWaveL.setMaxSpeed(40.0f);
     mWaveR.setMaxSpeed(40.0f);
@@ -3202,7 +3240,7 @@ void daShip_c::setRopePos() {
             mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(1), &spE0);
             spE0 -= *r4;
 
-            if (spE0.abs2XZ() < 2500.0f) {
+            if (spE0.abs2XZ() < SQUARE(50.0f)) {
                 currentRopeSegment = mRopeLineSegments;
                 f32 f2 = cM_scos(shape_angle.x) * 16.0f;
 
@@ -3320,7 +3358,7 @@ void daShip_c::setRopePos() {
                     emitter = dComIfGp_particle_setP1(dPa_name::ID_COMMON_0038, ropeSegments, NULL, NULL, 0xFF, &m19AC);
 
                     if(emitter) {
-                        emitter->setGlobalParticleScale(JGeometry::TVec3<f32>(1.5f, 1.5f, 1.0f));
+                        emitter->setGlobalParticleScale(1.5f, 1.5f);
                         emitter->setEmitterScale(water_drop_scale);
                         emitter->setLifeTime(30);
                     }
@@ -3387,7 +3425,7 @@ void daShip_c::setTornadoActor() {
         m040C = cM_atan2f(local_20.x, local_20.z);
         
         dCam_getBody()->SetTypeForce("Tornado", mTornadoActor);
-        m0404 = (6000.0f - m0400) * 0.0004f;
+        m0404 = (l_HIO.tornado_distance - m0400) * 0.0004f;
         if (m0404 < 0.0f) {
             m0404 = 0.0f;
         }
@@ -3416,7 +3454,7 @@ void daShip_c::setWhirlActor() {
         m0400 = local_20.absXZ();
         m040C = cM_atan2f(local_20.x, local_20.z);
         dCam_getBody()->SetTypeForce("Tornado", mWhirlActor);
-        m0404 = (4000.0f - m0400) * 0.00028571428f;
+        m0404 = (l_HIO.whirl_distance - m0400) * (1.0f / 3500.0f);
         if (m0404 < 0.0f) {
             m0404 = 0.0f;
         }
@@ -4000,12 +4038,12 @@ BOOL daShip_c::execute() {
                 if (bomb) {
                     dCam_getBody()->ForceLockOn(fpcM_GetID(bomb));
 
-                    bomb->setNoGravityTime(8);
+                    bomb->setNoGravityTime(l_HIO.cannon_no_gravity_timer);
 
-                    bomb->speedF = cM_scos(sp1C.x) * 110.0f;
-                    bomb->speed.y = -(cM_ssin(sp1C.x) * 110.0f);
+                    bomb->speedF = cM_scos(sp1C.x) * l_HIO.cannon_speed;
+                    bomb->speed.y = -(cM_ssin(sp1C.x) * l_HIO.cannon_speed);
 
-                    bomb->gravity = -2.5f;
+                    bomb->gravity = l_HIO.cannon_gravity;
 
                     seStart(JA_SE_LK_SHIP_CANNON_FIRE, &m1038);
 
@@ -4119,7 +4157,7 @@ BOOL daShip_c::execute() {
 #if VERSION == VERSION_DEMO
             attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
 #endif
-            if (fopAcM_searchPlayerDistanceXZ2(this) < 250000.0f) {
+            if (fopAcM_searchPlayerDistanceXZ2(this) < SQUARE(500.0f)) {
                 spC0 = link->eyePos - eyePos;
                 r23_2 = TRUE;
 #if VERSION > VERSION_DEMO
@@ -4189,7 +4227,7 @@ BOOL daShip_c::execute() {
             (!dComIfGp_event_runCheck() && dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) ||
             (
                 std::fabsf(current.pos.y - link->current.pos.y) < 50.0f &&
-                spB4.abs2XZ() < 62500.0f &&
+                spB4.abs2XZ() < SQUARE(250.0f) &&
                 fopAcM_seenPlayerAngleY(this) < 0x6000 &&
                 mNextMessageNo != 0xD65
             )
@@ -4383,7 +4421,7 @@ BOOL daShip_c::createHeap() {
         m0392 = SHIP_BCK_FN_MAST_OFF2;
     }
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_FN_BODY);
-    JUT_ASSERT(VERSION_SELECT(6969, 7004, 7004, 7004), modelData != 0);
+    JUT_ASSERT(DEMO_SELECT(6969, 7004), modelData != NULL);
 
     mpBodyAnm = new mDoExt_McaMorf(
         modelData, NULL, NULL,
@@ -4408,7 +4446,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_VFNCN);
-    JUT_ASSERT(VERSION_SELECT(7006, 7041, 7041, 7041), modelData != 0);
+    JUT_ASSERT(DEMO_SELECT(7006, 7041), modelData != NULL);
     mpCannonModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     
     if (mpCannonModel == NULL) {
@@ -4416,7 +4454,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_VFNCR);
-    JUT_ASSERT(VERSION_SELECT(7019, 7054, 7054, 7054), modelData != 0);
+    JUT_ASSERT(DEMO_SELECT(7019, 7054), modelData != NULL);
     mpSalvageArmModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
     if (mpSalvageArmModel == NULL) {
@@ -4424,7 +4462,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
-    JUT_ASSERT(VERSION_SELECT(7032, 7067, 7067, 7067), modelData != 0);
+    JUT_ASSERT(DEMO_SELECT(7032, 7067), modelData != NULL);
     mpLinkModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
 
     if (mpLinkModel == NULL) {
@@ -4432,7 +4470,7 @@ BOOL daShip_c::createHeap() {
     }
 
     modelData = (J3DModelData *)dComIfG_getObjectRes(l_arcName, SHIP_BDL_FN_HEAD_H);
-    JUT_ASSERT(VERSION_SELECT(7045, 7080, 7080, 7080), modelData != 0);
+    JUT_ASSERT(DEMO_SELECT(7045, 7080), modelData != NULL);
 
     m03B4 = SHIP_BCK_FN_LOOK_L;
 
@@ -4489,11 +4527,11 @@ cPhs_State daShip_c::create() {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 75.0f,
             /* Height */ 115.0f,
-        },
+        }},
     };
     
     static dCcD_SrcSph sph_src = {
@@ -4519,10 +4557,10 @@ cPhs_State daShip_c::create() {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 75.0f,
-        },
+        }},
     };
     
     fopAcM_SetupActor(this, daShip_c);
@@ -4558,7 +4596,7 @@ cPhs_State daShip_c::create() {
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
             if ((jno == 10) || (jno == 5) || (jno == 7) || (jno == 6)) {
-                pModelData->getJointTree().getJointNodePointer(jno)->setCallBack(daShip_bodyJointCallBack);
+                pModelData->getJointNodePointer(jno)->setCallBack(daShip_bodyJointCallBack);
             }
         }
 
@@ -4583,7 +4621,7 @@ cPhs_State daShip_c::create() {
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
             if (jno == 8 || jno == 10) {
-                pModelData->getJointTree().getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack0);
+                pModelData->getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack0);
             }
             else if (
                 !(jno != 2 && jno != 3 && jno != 4 && jno != 5 && jno != 6) || (jno == 7)
@@ -4591,7 +4629,7 @@ cPhs_State daShip_c::create() {
                 // jno == 2 || jno == 3 || jno == 4 || jno == 5 || jno == 6 || jno == 7
                 // But the compiler optimizes that differently
             ) {
-                pModelData->getJointTree().getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack1);
+                pModelData->getJointNodePointer(jno)->setCallBack(daShip_headJointCallBack1);
             }
         }
         
@@ -4599,11 +4637,11 @@ cPhs_State daShip_c::create() {
         
         pModelData = mpCannonModel->getModelData();
         
-        pModelData->getJointTree().getJointNodePointer(1)->setCallBack(daShip_cannonJointCallBack);
-        pModelData->getJointTree().getJointNodePointer(2)->setCallBack(daShip_cannonJointCallBack);
+        pModelData->getJointNodePointer(1)->setCallBack(daShip_cannonJointCallBack);
+        pModelData->getJointNodePointer(2)->setCallBack(daShip_cannonJointCallBack);
         
         mpSalvageArmModel->setUserArea(reinterpret_cast<u32>(this));
-        mpSalvageArmModel->getModelData()->getJointTree().getJointNodePointer(1)->setCallBack(daShip_craneJointCallBack);
+        mpSalvageArmModel->getModelData()->getJointNodePointer(1)->setCallBack(daShip_craneJointCallBack);
         
         m034B = fopAcM_GetParam(this);
         mPart = PART_WAIT_e;

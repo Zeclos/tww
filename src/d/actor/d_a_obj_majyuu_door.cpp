@@ -3,6 +3,7 @@
  * Object - Forsaken Fortress - Large wooden barricade (blocks entrance, destroyed with Bombs)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_majyuu_door.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
@@ -31,11 +32,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 75.0f,
         /* Height */ 115.0f,
-    },
+    }},
 };
 
 
@@ -125,7 +126,7 @@ bool daObj_MjDoor_c::_draw() {
 }
 
 /* 00000F28-00000F48       .text daObj_MjDoorCreate__FPv */
-static s32 daObj_MjDoorCreate(void* i_this) {
+static cPhs_State daObj_MjDoorCreate(void* i_this) {
     return ((daObj_MjDoor_c*)i_this)->_create();
 }
 

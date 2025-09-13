@@ -3,13 +3,12 @@
 // Translation Unit: d_a_tag_msg.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_msg.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -90,7 +89,7 @@ BOOL daTag_Msg_c::rangeCheck() {
     if (diff.y < 0.0f) {
         diff.y = -diff.y;
     }
-    if (diff.abs2XZ() < scale.x * scale.x * 10000.0f) {
+    if (diff.abs2XZ() < SQUARE(scale.x) * SQUARE(100.0f)) {
         if(diff.y <= scale.y * 100.0f) {
             return TRUE;
         }

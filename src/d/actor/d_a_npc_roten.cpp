@@ -3,6 +3,7 @@
  * NPC - Traveling Merchants
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_roten.h"
 #include "d/res/res_ro.h"
 #include "m_Do/m_Do_ext.h"
@@ -14,8 +15,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_a_obj.h"
 #include "d/d_snap.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 
@@ -1398,10 +1397,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
-    },
+    }},
 };
 
 static char* l_npc_staff_id[] = {
@@ -1782,7 +1781,7 @@ cPhs_State daNpcRoten_c::createInit() {
 
 /* 000011C8-0000122C       .text _delete__12daNpcRoten_cFv */
 bool daNpcRoten_c::_delete() {
-    dComIfG_resDelete(getPhaseP(), l_arcname_tbl[mNpcNo]);
+    dComIfG_resDeleteDemo(getPhaseP(), l_arcname_tbl[mNpcNo]);
     if(heap && mpMorf) {
         mpMorf->stopZelAnime();
     }
@@ -2882,7 +2881,7 @@ void daNpcRoten_c::setCollisionH() {
 }
 
 /* 00003F08-00003F28       .text daNpc_RotenCreate__FPv */
-static s32 daNpc_RotenCreate(void* i_this) {
+static cPhs_State daNpc_RotenCreate(void* i_this) {
     return static_cast<daNpcRoten_c*>(i_this)->_create();
 }
 

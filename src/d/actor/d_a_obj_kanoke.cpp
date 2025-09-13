@@ -3,6 +3,7 @@
  * Object - Earth Temple - Coffin
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_kanoke.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -31,11 +32,11 @@ static dCcD_SrcCps l_cps_src_body = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 50.0f, -100.0f,
-        /* End    */ 0.0f, 50.0f, 100.0f,
+    {{
+        /* Start  */ {0.0f, 50.0f, -100.0f},
+        /* End    */ {0.0f, 50.0f, 100.0f},
         /* Radius */ 100.0f,
-    },
+    }},
 };
 
 
@@ -62,11 +63,11 @@ static dCcD_SrcCps l_cps_src_huta = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 50.0f, -100.0f,
-        /* End    */ 0.0f, 50.0f, 100.0f,
+    {{
+        /* Start  */ {0.0f, 50.0f, -100.0f},
+        /* End    */ {0.0f, 50.0f, 100.0f},
         /* Radius */ 25.0f,
-    },
+    }},
 };
 
 
@@ -191,7 +192,7 @@ void daObjKanoke_c::setMtxHuta(cXyz*) {
 }
 
 /* 00001E4C-00001E6C       .text daObjKanokeCreate__FPv */
-static s32 daObjKanokeCreate(void* i_this) {
+static cPhs_State daObjKanokeCreate(void* i_this) {
     return ((daObjKanoke_c*)i_this)->_create();
 }
 

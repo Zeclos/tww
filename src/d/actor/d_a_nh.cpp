@@ -3,6 +3,7 @@
  * Item - Forest Firefly / 森のほたる (Mori no Hotaru)
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_nh.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -50,11 +51,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 10.0f,
         /* Height */ 20.0f,
-    },
+    }},
 };
 
 /* 800F95B8-800F9654       .text __ct__10daNh_HIO_cFv */
@@ -112,7 +113,7 @@ void daNh_c::setBaseMtx() {
 /* 800F9980-800F9A54       .text createHeap__6daNh_cFv */
 BOOL daNh_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_NH);
-    JUT_ASSERT(VERSION_SELECT(357, 359, 359, 359), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(357, 359), modelData != NULL);
     
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (!mpModel) {
@@ -321,7 +322,7 @@ BOOL daNh_c::checkEscapeEnd() {
             setAction(&daNh_c::waitAction, NULL);
             return TRUE;
         }
-        if (homeDelta.abs2XZ() > l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+        if (homeDelta.abs2XZ() > SQUARE(l_HIO.prm.mMaxHomeDist)) {
             setAction(&daNh_c::returnAction, NULL);
             return TRUE;
         }
@@ -366,7 +367,7 @@ BOOL daNh_c::returnAction(void*) {
         } else {
             s16 targetAngle = cLib_targetAngleY(&current.pos, &home.pos);
             cXyz homeDelta = home.pos - current.pos;
-            if (homeDelta.abs2XZ() < l_HIO.prm.mMaxHomeDist*l_HIO.prm.mMaxHomeDist) {
+            if (homeDelta.abs2XZ() < SQUARE(l_HIO.prm.mMaxHomeDist)) {
                 s16 angle = targetAngle - fopAcM_searchPlayerAngleY(this);
                 if (abs(angle) < 0x1000) {
                     if (angle < 0) {
@@ -438,7 +439,7 @@ BOOL daNh_c::initBrkAnm(bool i_modify) {
     bool success = false;
     
     J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Always", ALWAYS_BRK_TNH);
-    JUT_ASSERT(VERSION_SELECT(881, 883, 883, 883), a_brk != NULL);
+    JUT_ASSERT(DEMO_SELECT(881, 883), a_brk != NULL);
     
     if (mBrkAnm.init(modelData, a_brk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, i_modify, false)) {
         success = true;

@@ -3,6 +3,7 @@
 // Translation Unit: d_a_obj_stair.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_stair.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
@@ -32,11 +33,11 @@ static dCcD_SrcCps cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
-    },
+    }},
 };
 
 
@@ -76,7 +77,7 @@ BOOL daObj_Stair_c::Delete() {
 }
 
 /* 000004B8-000004D8       .text daObj_StairCreate__FPv */
-static s32 daObj_StairCreate(void* i_this) {
+static cPhs_State daObj_StairCreate(void* i_this) {
     return ((daObj_Stair_c*)i_this)->_create();
 }
 

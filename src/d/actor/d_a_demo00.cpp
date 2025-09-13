@@ -3,6 +3,7 @@
 // Translation Unit: d_a_demo00.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_demo00.h"
 #include "JSystem/J3DGraphAnimator/J3DSkinDeform.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
@@ -290,7 +291,7 @@ BOOL daDemo00_c::execute() {
                 if (!spCC.isEnd() && spCC.isValid()) {
                     TValueIterator_raw<u8> it = spCC.begin();
                     int argID = *it;
-                    JUT_ASSERT(VERSION_SELECT(771, 832, 832, 832), argID < (sizeof(l_eventBit)/sizeof(u16)));
+                    JUT_ASSERT(DEMO_SELECT(771, 832), argID < (sizeof(l_eventBit)/sizeof(u16)));
                     if (l_eventBit[argID] != 0xFFFF) {
                         dComIfGs_onEventBit(l_eventBit[argID]);
                     }
@@ -313,7 +314,7 @@ BOOL daDemo00_c::execute() {
                 if (!spB8.isEnd() && spB8.isValid()) {
                     TValueIterator_raw<u8> it = spB8.begin();
                     int argID = *it;
-                    JUT_ASSERT(VERSION_SELECT(797, 858, 858, 858), argID < (sizeof(l_itemNo)/sizeof(u8)));
+                    JUT_ASSERT(DEMO_SELECT(797, 858), argID < (sizeof(l_itemNo)/sizeof(u8)));
                     if (l_itemNo[argID] != dItem_NONE_e) {
                         execItemGet(l_itemNo[argID]);
                     }

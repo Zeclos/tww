@@ -3,6 +3,7 @@
 // Translation Unit: d_a_fallrock.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock.h"
 #include "d/res/res_always.h"
 #include "d/d_com_inf_game.h"
@@ -11,7 +12,6 @@
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
-
 
 char daFallRock_c::m_arcname[] = "Always";
 f32 daFallRock_c::m_falllen = 7000.0f;
@@ -40,11 +40,11 @@ const dCcD_SrcCyl daFallRock_c::m_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 
@@ -56,7 +56,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000098-00000140       .text CreateHeap__12daFallRock_cFv */
 BOOL daFallRock_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname, ALWAYS_BDL_KROCK_00);
-    JUT_ASSERT(VERSION_SELECT(159, 161, 161, 161), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(159, 161), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11020002);
     return TRUE;

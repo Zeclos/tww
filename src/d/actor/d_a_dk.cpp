@@ -3,6 +3,7 @@
  * NPC - Helmaroc King (Forsaken Fortress 1 tower, Outset Island)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_dk.h"
 #include "d/res/res_dk.h"
 #include "d/d_com_inf_game.h"
@@ -350,7 +351,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 #endif
 
     modelData = (J3DModelData*) dComIfG_getObjectIDRes("Dk", DK_BDL_DK_TAIL);
-    JUT_ASSERT(VERSION_SELECT(817, 819, 819, 819), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(817, 819), modelData != NULL);
 
     for (s32 i = 0; i < 4; i++) {
         for (s32 j = 0; j < 9; j++) {

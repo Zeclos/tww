@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_graphic.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
@@ -31,10 +32,6 @@
 #include "JSystem/JUtility/JUTVideo.h"
 #include "JSystem/JUtility/JUTXfb.h"
 #include "dolphin/base/PPCArch.h"
-
-#if VERSION == VERSION_DEMO
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
-#endif
 
 JUTFader * mDoGph_gInf_c::mFader;
 ResTIMG * mDoGph_gInf_c::mFrameBufferTimg;
@@ -88,7 +85,7 @@ void mDoGph_gInf_c::create() {
     JFWDisplay::createManager(heap, JUTXfb::Double, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
     JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
-    JUT_ASSERT(VERSION_SELECT(414, 416, 416, 416), faderPtr != NULL);
+    JUT_ASSERT(DEMO_SELECT(414, 416), faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
     JUTProcBar::getManager()->setVisibleHeapBar(false);
@@ -129,10 +126,10 @@ void mDoGph_gInf_c::createHeap() {
 #endif
 
     mHeap[0] = JKRSolidHeap::create(0x10000, parentHeap, false);
-    JUT_ASSERT(VERSION_SELECT(488, 491, 491, 491), mHeap[0] != NULL);
+    JUT_ASSERT(DEMO_SELECT(488, 491), mHeap[0] != NULL);
 
     mHeap[1] = JKRSolidHeap::create(0x10000, parentHeap, false);
-    JUT_ASSERT(VERSION_SELECT(490, 493, 493, 493), mHeap[1] != NULL);
+    JUT_ASSERT(DEMO_SELECT(490, 493), mHeap[1] != NULL);
 
     mCurrentHeap = 0;
 }
@@ -1471,7 +1468,7 @@ void mCaptureGXDrawSyncCallback(u16) {
     if (mCaptureStep == 2) {
 #endif
         void* oldcb = (void*)GXSetDrawSyncCallback(mCaptureOldCB);
-        JUT_ASSERT(VERSION_SELECT(2580, 2655, 2655, 2655), oldcb == mCaptureGXDrawSyncCallback);
+        JUT_ASSERT(DEMO_SELECT(2580, 2655), oldcb == mCaptureGXDrawSyncCallback);
         mCaptureOldCB = NULL;
         mCaptureStep++;
 #if VERSION > VERSION_DEMO
@@ -1556,7 +1553,7 @@ bool mDoGph_screenCapture() {
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
 
-    JUT_ASSERT(VERSION_SELECT(2657, 2753, 2753, 2753), mCaptureOldCB == NULL);
+    JUT_ASSERT(DEMO_SELECT(2657, 2753), mCaptureOldCB == NULL);
     mCaptureOldCB = GXSetDrawSyncCallback(mCaptureGXDrawSyncCallback);
 #if VERSION > VERSION_DEMO
     OSCreateAlarm(&mCaptureTimeOutAlarm);

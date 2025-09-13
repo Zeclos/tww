@@ -3,6 +3,7 @@
  * Object - Baba Bud
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_jbo.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
@@ -49,7 +50,7 @@ void jbo_draw_SUB(jbo_class *i_this) {
         mDoMtx_stack_c::scaleM(scale);
         mDoMtx_stack_c::YrotM(-i_this->mAnimRotation);
     }
-    MTXCopy(mDoMtx_stack_c::now, model->getBaseTRMtx());
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000240-000002C4       .text daJBO_Draw__FP9jbo_class */
@@ -228,10 +229,10 @@ static cPhs_State daJBO_Create(fopAc_ac_c* i_this) {
                     /* SrcGObjCo SPrm    */ 0,
                 },
                 // cM3dGSphS
-                {
-                    /* Center */ 0.0f, 0.0f, 0.0f,
+                {{
+                    /* Center */ {0.0f, 0.0f, 0.0f},
                     /* Radius */ 15.0f,
-                },
+                }},
             };
             a_this->mSph.Set(co_sph_src);
             a_this->mSph.SetStts(&a_this->mStts);

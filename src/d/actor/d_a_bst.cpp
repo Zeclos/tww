@@ -3,6 +3,7 @@
  * Boss - Gohdan
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bst.h"
 #include "d/actor/d_a_bomb.h"
 #include "d/d_bg_s_lin_chk.h"
@@ -21,6 +22,19 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "JSystem/JUtility/JUTReport.h"
+
+class daBst_HIO_c : public JORReflexible {
+public:
+    daBst_HIO_c();
+    virtual ~daBst_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x4 */ s8 field_0x4;
+    /* 0x5 */ u8 field_0x5;
+    /* 0x6 */ u8 field_0x6;
+};
 
 static u8 hio_set;
 static daBst_HIO_c l_HIO;
@@ -1147,8 +1161,8 @@ static void damage_check(bst_class* i_this) {
                     cXyz player_vec = i_this->current.pos - player->current.pos;
                     i_this->mHurtRecoilAngle1 = cM_atan2s(player_vec.x, player_vec.z);
 
-                    f32 xz = player_vec.x * player_vec.x + player_vec.z * player_vec.z;
-                    i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(xz));
+                    f32 xz2 = SQUARE(player_vec.x) + SQUARE(player_vec.z);
+                    i_this->mHurtRecoilAngle2 = -cM_atan2s(player_vec.y, std::sqrtf(xz2));
 
                     i_this->speedF = 0.0f;
 
@@ -1486,7 +1500,7 @@ static void main_cont(bst_class* i_this) {
                 break;
             case 1:
                 if (!dComIfGs_isStageBossEnemy() || REG0_S(5) != 0) {
-                    i_this->actor_status |= fopAcStts_SHOWMAP_e;
+                    fopAcM_OnStatus(i_this, fopAcStts_SHOWMAP_e);
                     if (dComIfGs_isStageBossDemo()) {
                         i_this->field_0x2FE4 = 1;
                         mDoAud_bgmStart(JA_BGM_BST_BATTLE);
@@ -2170,7 +2184,7 @@ static BOOL daBst_Execute(bst_class* i_this) {
 
                 if (i_this->mEyeHealth[j] > 0 && i_this->field_0x10D6 != 7) {
                     actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-                    actor->attention_info.distances[2] = 4;
+                    actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
 
                     fopAcM_seStart(i_this, JA_SE_CM_BST_HEAD_WORKING, 0);
                     continue;
@@ -2444,11 +2458,11 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 100.0f,
             /* Height */ 400.0f,
-        },
+        }},
     };
     static dCcD_SrcCyl core_cyl_src = {
         // dCcD_SrcGObjInf
@@ -2473,11 +2487,11 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 50.0f,
             /* Height */ 200.0f,
-        },
+        }},
     };
     static dCcD_SrcSph finger_sph_src = {
         // dCcD_SrcGObjInf
@@ -2502,10 +2516,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
     static dCcD_SrcSph eye_sph_src = {
         // dCcD_SrcGObjInf
@@ -2530,10 +2544,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
     static dCcD_SrcSph beam_sph_src = {
         // dCcD_SrcGObjInf
@@ -2558,10 +2572,10 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 60.0f,
-        },
+        }},
     };
 
     fopAcM_SetupActor(a_this, bst_class);
@@ -2579,7 +2593,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
         }
 
         i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-        i_this->attention_info.distances[2] = 4;
+        i_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
         if (hio_set == 0) {
             i_this->mHioSet = 1;
             hio_set = 1;

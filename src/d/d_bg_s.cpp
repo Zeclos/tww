@@ -64,7 +64,7 @@ bool dBgS::Regist(cBgW* bgw, fopAc_ac_c* ac) {
 
 /* 800A03C4-800A0420       .text ChkMoveBG__4dBgSFR13cBgS_PolyInfo */
 bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
-    dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
+    dBgW* bgwp = dComIfG_Bgsp()->GetBgWPointer(polyInfo);
     if (bgwp != NULL) {
         if (bgwp->ChkLock())
             return false;
@@ -76,7 +76,7 @@ bool dBgS::ChkMoveBG(cBgS_PolyInfo& polyInfo) {
 
 /* 800A0420-800A046C       .text ChkMoveBG_NoDABg__4dBgSFR13cBgS_PolyInfo */
 bool dBgS::ChkMoveBG_NoDABg(cBgS_PolyInfo& polyInfo) {
-    dBgW* bgwp = (dBgW*)dComIfG_Bgsp()->GetBgWPointer(polyInfo);
+    dBgW* bgwp = dComIfG_Bgsp()->GetBgWPointer(polyInfo);
     if (bgwp != NULL) {
         if (bgwp->ChkMoveBg())
             return true;
@@ -555,9 +555,9 @@ void dBgS_CrrPos::CrrPos(dBgS& i_bgs) {
     CHECK_PVEC3_RANGE(2280, pm_pos);
     
     if (!(mFlag & 4)) {
-        f32 dist2 = GetOldPos()->abs2(*pm_pos);
+        f32 dist_sq = GetOldPos()->abs2(*pm_pos);
         bool inWall = false;
-        if (dist2 > (0.65f*0.65f * GetWallR()*GetWallR())) {
+        if (dist_sq > (SQUARE(0.65f) * GetWallR()*GetWallR())) {
             inWall = true;
             
             cBgS_LinChk linChk;

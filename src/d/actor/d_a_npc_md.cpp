@@ -3,6 +3,7 @@
  * Player - Medli
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -16,9 +17,6 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_camera.h"
 #include "d/d_detect.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static daNpc_Md_HIO_c l_HIO;
 
@@ -65,11 +63,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_light_cyl_src = {
@@ -95,11 +93,11 @@ static dCcD_SrcCyl l_light_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_fan_light_cps_src = {
@@ -125,11 +123,11 @@ static dCcD_SrcCps l_fan_light_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 70.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_wind_cyl_src = {
@@ -155,11 +153,11 @@ static dCcD_SrcCyl l_wind_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 80.0f,
-    },
+    }},
 };
 
 
@@ -1197,15 +1195,15 @@ void daNpc_Md_c::NpcCall(int* r31) {
     if (!dComIfGs_isEventBit(0x1620)) {
         return;
     }
-    f32 dist2 = fopAcM_searchPlayerDistance2(this);
+    f32 dist_sq = fopAcM_searchPlayerDistance2(this);
     if (!checkNpcCallCommand()) {
-        if (dist2 < l_HIO.m0C8*l_HIO.m0C8) {
+        if (dist_sq < SQUARE(l_HIO.m0C8)) {
             daPy_getPlayerLinkActorClass()->onNpcCallCommand();
             *r31 = 1;
         }
     } else {
         f32 temp = 2.0f*l_HIO.m0C4;
-        if (dist2 >= temp*temp) {
+        if (dist_sq >= temp*temp) {
             setNpcAction(&daNpc_Md_c::searchNpcAction);
         }
         *r31 = 1;
@@ -1362,7 +1360,7 @@ BOOL daNpc_Md_c::waitNpcAction(void*) {
             f32 playerDistY = link->current.pos.y - current.pos.y;
             f32 f3 = l_HIO.m0BC;
             f32 f4 = l_HIO.m0C0;
-            if (playerDistXZ2 < l_HIO.m0CC * l_HIO.m0CC && playerDistY < f3 && playerDistY > f4) {
+            if (playerDistXZ2 < SQUARE(l_HIO.m0CC) && playerDistY < f3 && playerDistY > f4) {
                 mCurEventMode = 0xB;
             }
         } else {

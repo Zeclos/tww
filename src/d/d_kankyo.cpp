@@ -3,6 +3,7 @@
 // Translation Unit: d_kankyo.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_kankyo.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
@@ -22,8 +23,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 #include "math.h"
-
-#include "weak_data_2100_2080.h" // IWYU pragma: keep
 
 #include "d/d_kankyo_dayproc.inc"
 
@@ -84,9 +83,6 @@ dKy_setLight__Status lightStatusBase = {
 u16 lightMaskData[] = {
     GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7,
 };
-
-// Fakematch? Fixes weak function order.
-#pragma sym off
 
 /**
  * Returns true if toon lighting and shadow should be reversed.
@@ -350,11 +346,11 @@ void envcolor_init() {
     stage_vrbox_info_class* vrbox = dComIfGp_getStageVrboxInfo();
 
     for (int i = 0; i < 20; i++) {
-        g_regHIO.mChild[3].mFloatRegs[i] = 0.0f;
+        REG3_F(i) = 0.0f;
     }
 
     for (int i = 0; i < 10; i++) {
-        g_regHIO.mChild[3].mShortRegs[i] = 0;
+        REG3_S(i) = 0;
     }
 
 #if VERSION > VERSION_DEMO
@@ -533,7 +529,7 @@ void dScnKy_env_light_c::setDaytime() {
                 mDayOfWeek++;
                 dKankyo_DayProc();
             }
-        } else if (!dKy_daynight_check()) {
+        } else if (dKy_daynight_check() == dKy_TIME_DAY_e) {
             if (mCurTime < 165.0f) {
                 mCurTime += mTimeAdv;
             }
@@ -627,13 +623,13 @@ int dKy_getdaytime_minute() {
 }
 
 /* 80190CBC-80190CF8       .text dKy_daynight_check__Fv */
-BOOL dKy_daynight_check() {
+int dKy_daynight_check() {
     s32 hour = dKy_getdaytime_hour();
 
     if (hour >= 6 && hour < 18) {
-        return 0;  // day time
+        return dKy_TIME_DAY_e;
     } else {
-        return 1;  // night time
+        return dKy_TIME_NIGHT_e;
     }
 }
 

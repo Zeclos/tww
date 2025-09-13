@@ -3,6 +3,7 @@
 // Translation Unit: d_a_kmon.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kmon.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -33,7 +34,7 @@ void daKmon_c::checkTalk() {
 }
 
 /* 000006E8-000007F8       .text daKmonCreate__FPv */
-static s32 daKmonCreate(void*) {
+static cPhs_State daKmonCreate(void*) {
     /* Nonmatching */
 }
 

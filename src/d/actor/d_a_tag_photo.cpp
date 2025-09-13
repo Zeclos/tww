@@ -3,6 +3,7 @@
 // Translation Unit: d_a_tag_photo.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_photo.h"
 #include "d/actor/d_a_npc_photo.h"
 #include "d/d_a_obj.h"
@@ -11,8 +12,6 @@
 #include "d/d_procname.h"
 #include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 static u32 l_msg_talk[] = {
     0x2A6D,
@@ -115,7 +114,7 @@ cPhs_State daTagPhoto_c::_create() {
         NULL
     };
 
-    dComLbG_PhaseHandler(&mPhs, l_method, this);
+    return dComLbG_PhaseHandler(&mPhs, l_method, this);
 }
 
 /* 000001C8-000001D0       .text createHeap__12daTagPhoto_cFv */
@@ -129,8 +128,8 @@ cPhs_State daTagPhoto_c::createInit() {
     mPhotoTalk2EventIdx = dComIfGp_evmng_getEventIdx("PHOTO_TALK2");
     mEventCut.setActorInfo("TagPo", this);
     eventInfo.setEventId(mPhotoTalk2EventIdx);
-    attention_info.distances[1] = 0x23;
-    attention_info.distances[3] = 0x24;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x23;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x24;
     attention_info.flags = fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
     shape_angle = current.angle;
 
@@ -373,7 +372,7 @@ u8 daTagPhoto_c::getPrmTagNo() {
 }
 
 /* 00000928-00000948       .text daTagPhotoCreate__FPv */
-static s32 daTagPhotoCreate(void* i_this) {
+static cPhs_State daTagPhotoCreate(void* i_this) {
     return ((daTagPhoto_c*)i_this)->_create();
 }
 

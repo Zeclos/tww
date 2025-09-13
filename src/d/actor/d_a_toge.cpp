@@ -3,6 +3,7 @@
  * Object - Wind Temple - Floor spikes
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_toge.h"
 #include "d/res/res_htoge1.h"
 #include "d/actor/d_a_wind_tag.h"
@@ -39,12 +40,13 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
-    // cCcD_SrcCylAttr
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 55.0f,
         /* Height */ 150.0f,
-    }};
+    }},
+};
 
 /* 00000078-0000013C       .text _delete__8daToge_cFv */
 BOOL daToge_c::_delete() {

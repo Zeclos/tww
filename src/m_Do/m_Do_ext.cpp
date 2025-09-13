@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_ext.cpp
 //
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/JKernel/JKRArchive.h"
@@ -17,8 +18,6 @@
 #include "dolphin/gf/GF.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
-
-// #pragma sym on
 
 // Needed for the .data section to match.
 static Vec dummy_2100 = {1.0f, 1.0f, 1.0f};
@@ -69,6 +68,15 @@ void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 jnt_n
     J3DSys::mParentS.z = transformInfo->mScale.z;
 }
 
+static void dummy1() {
+    // Fix the weak function order of J3DAnmTransform::getTransform.
+    // There was most likely an unused function here that got stripped out.
+    j3dSys.setCurrentMtxCalc(NULL);
+    J3DJoint* joint;
+    J3DAnmTransform* anmTransform;
+    anmTransform->getTransform(0, &joint->getTransformInfo());
+}
+
 /* 8000DCF4-8000DD4C       .text isCurrentSolidHeap__Fv */
 bool isCurrentSolidHeap() {
     if (JKRGetCurrentHeap()->getHeapType() != 'SLID') {
@@ -110,7 +118,7 @@ int mDoExt_baseAnm::initPlay(s16 i_frameMax, int i_attribute, f32 i_rate, s16 i_
 }
 
 /* 8000DF24-8000DFC4       .text play__14mDoExt_baseAnmFv */
-int mDoExt_baseAnm::play() {
+BOOL mDoExt_baseAnm::play() {
     JUT_ASSERT(462, mFrameCtrl != NULL);
     mFrameCtrl->update();
     return isStop();
@@ -128,7 +136,6 @@ void mDoExt_bpkAnm::entry(J3DModelData* i_modelData, f32 param_1) {
 
 /* 8000E014-8000E2A8       .text init__13mDoExt_bpkAnmFP16J3DMaterialTableP11J3DAnmColoriifssbi */
 int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i_anmPlay, int i_attribute, f32 i_rate, s16 i_startF, s16 i_endF, bool i_modify, BOOL i_entry) {
-
     JUT_ASSERT(531, i_modify || isCurrentSolidHeap());
     JUT_ASSERT(533, i_matTable != NULL && i_bpk != NULL);
     mpAnm = i_bpk;
@@ -2590,12 +2597,3 @@ int mDoExt_3DlineMat1_c::getMaterialID() {
 int mDoExt_3DlineMat0_c::getMaterialID() {
     return 0;
 }
-
-/* 80016E40-80016F14       .text __dt__15mDoExt_McaMorf2Fv */
-mDoExt_McaMorf2::~mDoExt_McaMorf2() {}
-
-/* 80017000-800170D4       .text __dt__14mDoExt_McaMorfFv */
-mDoExt_McaMorf::~mDoExt_McaMorf() {}
-
-/* 800170D4-800171BC       .text __dt__28mDoExt_MtxCalcAnmBlendTblOldFv */
-mDoExt_MtxCalcAnmBlendTblOld::~mDoExt_MtxCalcAnmBlendTblOld() {}

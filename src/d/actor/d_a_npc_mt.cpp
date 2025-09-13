@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_mt.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mt.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
@@ -294,7 +295,7 @@ void daNpcMt_c::changePhotoNo(u8) {
 }
 
 /* 00002D4C-00002D6C       .text daNpc_MtCreate__FPv */
-static s32 daNpc_MtCreate(void* i_this) {
+static cPhs_State daNpc_MtCreate(void* i_this) {
     return ((daNpcMt_c*)i_this)->_create();
 }
 

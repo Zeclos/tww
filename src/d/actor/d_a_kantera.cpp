@@ -3,6 +3,7 @@
 // Translation Unit: d_a_kantera.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kantera.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -84,10 +85,10 @@ static cPhs_State daKantera_Create(fopAc_ac_c*) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 40.0f,
-        },
+        }},
     };
 }
 

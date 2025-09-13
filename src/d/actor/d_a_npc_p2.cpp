@@ -3,6 +3,7 @@
  * NPC - Zuko, Niko, & Mako
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_p2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_procname.h"
@@ -304,7 +305,7 @@ bool daNpc_P2_c::_delete() {
 }
 
 /* 00004D54-00004D74       .text daNpc_P2Create__FPv */
-static s32 daNpc_P2Create(void* i_this) {
+static cPhs_State daNpc_P2Create(void* i_this) {
     return ((daNpc_P2_c*)i_this)->_create();
 }
 

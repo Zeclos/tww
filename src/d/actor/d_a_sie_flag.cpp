@@ -3,6 +3,7 @@
 // Translation Unit: d_a_sie_flag.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sie_flag.h"
 #include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
@@ -16,7 +17,6 @@
 #include "d/res/res_eshata.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -41,11 +41,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 50.0f,
         /* Height */ 1000.0f,
-    },
+    }},
 };
 
 static daSie_Flag_HIO_c l_HIO;
@@ -55,7 +55,7 @@ static cXyz l_wind_offset(0.0f, 725.0f, 0.0f);
 
 /* 000000EC-00000118       .text __ct__16daSie_Flag_HIO_cFv */
 daSie_Flag_HIO_c::daSie_Flag_HIO_c() {
-    m04 = -1;
+    mNo = -1;
     m08 = 0.0f;
     m0c = 0;
 }
@@ -240,7 +240,7 @@ bool daSie_Flag_c::_draw() {
 }
 
 /* 00000B94-00000BB4       .text daSie_FlagCreate__FPv */
-static s32 daSie_FlagCreate(void* i_this) {
+static cPhs_State daSie_FlagCreate(void* i_this) {
     return ((daSie_Flag_c*)i_this)->_create();
 }
 

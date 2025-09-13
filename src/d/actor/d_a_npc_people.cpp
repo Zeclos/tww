@@ -3,6 +3,7 @@
 // Translation Unit: d_a_npc_people.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_people.h"
 #include "d/actor/d_a_kb.h"
 #include "d/actor/d_a_player.h"
@@ -18,8 +19,6 @@
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 
@@ -4197,7 +4196,7 @@ daNpcPeople_c::daNpcPeople_c() {
     m794 = 0;
     mEtcFlag = 0;
     m7A1 = 0;
-    mbIsNight = dKy_daynight_check() & 0x1; // this is weird but it generates the clrlwi
+    mbIsNight = dKy_daynight_check() & dKy_TIME_NIGHT_e; // this is weird but it generates the clrlwi
     mpNpcDat = l_npc_dat[mNpcType][mbIsNight];
     m730 = NULL;
 }
@@ -4534,7 +4533,7 @@ cPhs_State daNpcPeople_c::createInit() {
 
     fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
-    fopAcM_setCullSizeFar(this, mpNpcDat->field_0x30 / mDoLib_clipper::mSystemFar);
+    fopAcM_setCullSizeFar(this, mpNpcDat->field_0x30 / mDoLib_clipper::getFar());
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = l_npc_dist_tbl[mNpcType][mbIsNight];
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = l_npc_dist_tbl[mNpcType][mbIsNight];
     attention_info.flags = fopAc_Attn_UNK1000000_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
@@ -8353,7 +8352,7 @@ void daNpcPeople_c::warp() {
 }
 
 /* 000098DC-000098FC       .text daNpc_PeopleCreate__FPv */
-static s32 daNpc_PeopleCreate(void* i_this) {
+static cPhs_State daNpc_PeopleCreate(void* i_this) {
     return static_cast<daNpcPeople_c*>(i_this)->_create();
 }
 

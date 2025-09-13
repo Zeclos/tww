@@ -3,6 +3,7 @@
 // Translation Unit: d_a_msw.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_msw.h"
 #include "d/res/res_msw.h"
 #include "d/d_bg_s_movebg_actor.h"
@@ -219,7 +220,7 @@ BOOL daMsw_CreateInit(fopAc_ac_c* i_this) {
     }
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Msw", MSW_BDL_OBM_CHAIN1));
-    JUT_ASSERT(VERSION_SELECT(519, 523, 523, 523), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(519, 523), modelData != NULL);
 
     for (int chainIdx = 0; chainIdx < 4; chainIdx++) {
         pActor->mpChainModels[chainIdx] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -272,11 +273,11 @@ static cPhs_State daMsw_Create(fopAc_ac_c* i_this) {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGCylS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 10.0f,
             /* Height */ 1000.0f,
-        },
+        }},
     };
 
     fopAcM_SetupActor(i_this, msw_class);

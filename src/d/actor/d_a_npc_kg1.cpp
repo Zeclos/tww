@@ -3,6 +3,7 @@
  * NPC - Salvatore (Squid-Hunt/"Sploosh Kaboom" Minigame)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kg1.h"
 #include "d/d_lib.h"
 #include "d/d_procname.h"
@@ -32,11 +33,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 40.0f,
         /* Height */ 160.0f,
-    },
+    }},
 };
 
 
@@ -146,7 +147,7 @@ void daNpc_Kg1_c::setAnm() {
 }
 
 /* 00001F8C-00001FAC       .text daNpc_Kg1Create__FPv */
-static s32 daNpc_Kg1Create(void* i_this) {
+static cPhs_State daNpc_Kg1Create(void* i_this) {
     return ((daNpc_Kg1_c*)i_this)->_create();
 }
 

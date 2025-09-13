@@ -3,13 +3,12 @@
  * Object - Drop-down ladder
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ladder.h"
 #include "d/res/res_mhsg.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 Mtx daObjLadder::Act_c::M_tmp_mtx;
 
@@ -113,7 +112,7 @@ cPhs_State daObjLadder::Act_c::Mthd_Create() {
         mType = prm_get_type();
         phase_state = MoveBGCreate(
             M_arcname, attr_type(mType).dzbId, dBgS_MoveBGProc_Trans,
-            VERSION_SELECT(0x1700, 0x900, 0x900, 0x900)
+            DEMO_SELECT(0x1700, 0x900)
         );
 
         JUT_ASSERT(0x1DE, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -327,9 +326,6 @@ static BOOL Mthd_Execute(void* i_this) {
 static BOOL Mthd_Draw(void* i_this) {
     return static_cast<Act_c*>(i_this)->MoveBGDraw();
 }
-
-// Fakematch to fix weak func order/.text section splitting of dBgS_MoveBgActor::Draw().
-#pragma nosyminline off
 
 /* 000011CC-000011F8       .text Mthd_IsDelete__Q211daObjLadder28@unnamed@d_a_obj_ladder_cpp@FPv */
 static BOOL Mthd_IsDelete(void* i_this) {

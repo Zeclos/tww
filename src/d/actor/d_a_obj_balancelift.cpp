@@ -3,6 +3,7 @@
  * Object - Tower of the Gods - Pair of scales
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_balancelift.h"
 #include "d/d_bg_w.h"
 #include "d/d_procname.h"
@@ -32,11 +33,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 30.0f,
         /* Height */ 200.0f,
-    },
+    }},
 };
 
 
@@ -86,7 +87,7 @@ void daBalancelift_c::CreateInit() {
 }
 
 /* 00000F34-000010E0       .text daBalanceliftCreate__FPv */
-static s32 daBalanceliftCreate(void*) {
+static cPhs_State daBalanceliftCreate(void*) {
     /* Nonmatching */
 }
 

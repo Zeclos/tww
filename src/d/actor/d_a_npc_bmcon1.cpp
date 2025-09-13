@@ -3,6 +3,7 @@
  * NPC - Willi & Obli (Flight Control Platform)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bmcon1.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -278,7 +279,7 @@ void daNpcBmcon_c::isClear() {
 }
 
 /* 00003DFC-00003E1C       .text daNpc_BmconCreate__FPv */
-static s32 daNpc_BmconCreate(void* i_this) {
+static cPhs_State daNpc_BmconCreate(void* i_this) {
     return ((daNpcBmcon_c*)i_this)->_create();
 }
 

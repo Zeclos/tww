@@ -3,6 +3,7 @@
  * NPC - Lenzo
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_photo.h"
 #include "d/d_procname.h"
 #include "d/d_priority.h"
@@ -17,9 +18,6 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_picture_box.h"
 #include "d/actor/d_a_tag_photo.h"
-
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 extern dCcD_SrcCyl dNpc_cyl_src;
 
@@ -499,11 +497,11 @@ static dCcD_SrcCyl l_cyl_src2 = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 40.0f,
         /* Height */ 160.0f,
-    },
+    }},
 };
 
 static char* l_npc_staff_id = {
@@ -798,7 +796,6 @@ bool daNpcPhoto_c::_delete() {
 
 /* 000010A4-0000125C       .text _draw__12daNpcPhoto_cFv */
 bool daNpcPhoto_c::_draw() {
-
     J3DModel* model = mpMorf->getModel();
     J3DModelData *model_data = model->getModelData();
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
@@ -1000,11 +997,9 @@ void daNpcPhoto_c::executeWait() {
                 eventInfo.setEventId(-1);
                 field_0x9C7 = true;
 
-                dCcD_GObjInf* pGObjInf;
                 for (int i = 0; i < 2; i++) {
-                    pGObjInf = &field_0x6F8[i];
-                    if (pGObjInf->ChkCoHit()) {
-                        daNpcPhoto_c* pActor = (daNpcPhoto_c*)pGObjInf->GetCoHitAc();
+                    if (field_0x6F8[i].ChkCoHit()) {
+                        daNpcPhoto_c* pActor = (daNpcPhoto_c*)field_0x6F8[i].GetCoHitAc();
                         if(pActor != NULL && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
                             field_0x9CD = true;
                             break;
@@ -1939,7 +1934,6 @@ void daNpcPhoto_c::setMtx() {
 
 /* 000040B8-0000432C       .text chkAttention__12daNpcPhoto_cFv */
 void daNpcPhoto_c::chkAttention() {
-
     if(mEventCut.getAttnFlag()) {
         mLookAtPos = mEventCut.getAttnPos();
         field_0x9D6 = 1;
@@ -2252,7 +2246,7 @@ void daNpcPhoto_c::setCollision(dCcD_Cyl* cyl, cXyz center, f32 radius, f32 heig
 }
 
 /* 00004D44-00004D64       .text daNpc_PhotoCreate__FPv */
-static s32 daNpc_PhotoCreate(void* i_this) {
+static cPhs_State daNpc_PhotoCreate(void* i_this) {
     return static_cast<daNpcPhoto_c*>(i_this)->_create();
 }
 

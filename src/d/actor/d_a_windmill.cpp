@@ -3,6 +3,7 @@
 // Translation Unit: d_a_windmill.cpp
 //
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_windmill.h"
 #include "d/actor/d_a_wind_tag.h"
 #include "d/res/res_hpu1.h"
@@ -13,9 +14,6 @@
 #include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_movebg_actor.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-
 
 const char* daWindMill_c::m_arcname[] = { "Hpu1", "Hpu2" };
 
@@ -42,10 +40,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 90.0f,
-    },
+    }},
 };
 
 
@@ -72,11 +70,11 @@ static dCcD_SrcCps l_cps_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 200.0f,
-    },
+    }},
 };
 
 
@@ -103,11 +101,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 250.0f,
         /* Height */ 400.0f,
-    },
+    }},
 };
 
 const s16 daWindMill_c::m_bmdidx[] = {HPU1_BDL_HPU1, HPU2_BDL_HPU2};
@@ -140,7 +138,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 /* 00000108-000002A0       .text CreateHeap__12daWindMill_cFv */
 BOOL daWindMill_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectRes(m_arcname[mType], m_bmdidx[mType]);
-    JUT_ASSERT(VERSION_SELECT(399, 405, 405, 405), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(399, 405), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000,0x11000222);
     if (mpModel == NULL) {

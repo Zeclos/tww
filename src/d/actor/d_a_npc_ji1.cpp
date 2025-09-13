@@ -3,6 +3,7 @@
  * NPC - Orca / 爺さん (Jiisan)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_ji1.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tsubo.h"
@@ -15,9 +16,6 @@
 #include "d/d_snap.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
-#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
 
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c*);
 
@@ -49,11 +47,11 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
         /* Height */ 170.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_cyl2_src = {
@@ -79,11 +77,11 @@ static dCcD_SrcCyl l_cyl2_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 60.0f,
         /* Height */ 200.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCyl l_cylAt_src = {
@@ -109,11 +107,11 @@ static dCcD_SrcCyl l_cylAt_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 150.0f,
         /* Height */ 100.0f,
-    },
+    }},
 };
 
 static dCcD_SrcCps l_cpsAt_src = {
@@ -139,11 +137,11 @@ static dCcD_SrcCps l_cpsAt_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCpsS
-    {
-        /* Start  */ 0.0f, 0.0f, 0.0f,
-        /* End    */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Start  */ {0.0f, 0.0f, 0.0f},
+        /* End    */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 80.0f,
-    },
+    }},
 };
 
 /* 000000EC-00000380       .text __ct__15daNpc_Ji1_HIO_cFv */
@@ -1183,7 +1181,7 @@ BOOL daNpc_Ji1_c::speakAction(void*) {
                     else if(field_0xC90 == 3) {
                         mMsgNo = 0x983;
                         attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
-                        attention_info.distances[2] = 3;
+                        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 3;
                     }
                     else {
                         mMsgNo = 0x980;
@@ -1198,7 +1196,7 @@ BOOL daNpc_Ji1_c::speakAction(void*) {
                     else if(field_0xC90 == 3) {
                         mMsgNo = 0x96C;
                         attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
-                        attention_info.distances[2] = 0xB5;
+                        attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0xB5;
                     }
                     else {
                         mMsgNo = 0x985;
@@ -3750,8 +3748,8 @@ BOOL daNpc_Ji1_c::battleAtSet() {
     f32 cos = cM_scos(current.angle.y);
 
     if(mAnimation == 0x14) {
-        field_0xA40.SetR(g_regHIO.mChild[10].mFloatRegs[9] + 85.0f);
-        field_0xB90.y = field_0xB78.y = g_regHIO.mChild[10].mFloatRegs[10] + 40.0f;
+        field_0xA40.SetR(REG10_F(9) + 85.0f);
+        field_0xB90.y = field_0xB78.y = REG10_F(10) + 40.0f;
         field_0xA40.SetStartEnd(field_0xB90, field_0xB78);
         field_0xA40.CalcVec(&temp);
         if(!temp.normalizeRS()) {

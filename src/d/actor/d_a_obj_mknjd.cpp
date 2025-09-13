@@ -3,6 +3,7 @@
  * Object - Earth God's Lyric/Wind God's Aria statues
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mknjd.h"
 #include "d/d_s_play.h" // IWYU pragma: keep
 #include "d/res/res_mknjd.h"
@@ -24,7 +25,6 @@
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-
 
 #define ACT_SETGOAL 0
 #define ACT_SETANGLE 1
@@ -279,7 +279,7 @@ BOOL daObjMknjD::Act_c::Create() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x3D;
     cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_CHECK_e);
 
-    if (!checkItemGet(mGiveItemNo, 1)) {
+    if (!checkItemGet(mGiveItemNo, TRUE)) {
         m043F = 8;
         eventInfo.setXyCheckCB(daObjMknjD_XyCheckCB);
         eventInfo.setXyEventCB(daObjMknjD_XyEventCB);
@@ -895,7 +895,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             privateCut();
 
             if (!dComIfGp_event_runCheck()) {
-                if (checkItemGet(mGiveItemNo, 1)) {
+                if (checkItemGet(mGiveItemNo, TRUE)) {
                     m043F = 0;
                 }
                 else {
@@ -913,7 +913,7 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
                 player->offPlayerNoDraw();
                 dComIfGp_event_reset();
 
-                if (checkItemGet(mGiveItemNo, 1)) {
+                if (checkItemGet(mGiveItemNo, TRUE)) {
                     m043F = 0;
                 }
                 else {

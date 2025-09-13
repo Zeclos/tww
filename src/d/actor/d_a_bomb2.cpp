@@ -3,6 +3,7 @@
  * Object - Bomb Flower - Bomb
  */
 
+#include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bomb2.h"
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_player.h"
@@ -15,8 +16,6 @@
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
-
-#include "weak_data_1811.h" // IWYU pragma: keep
 
 namespace daBomb2 {
     namespace {
@@ -323,10 +322,10 @@ namespace daBomb2 {
             /* SrcGObjCo SPrm    */ 0,
         },
         // cM3dGSphS
-        {
-            /* Center */ 0.0f, 0.0f, 0.0f,
+        {{
+            /* Center */ {0.0f, 0.0f, 0.0f},
             /* Radius */ 30.0f,
-        },
+        }},
     };
 
     void Act_c::cc_init() {
@@ -646,7 +645,7 @@ namespace daBomb2 {
         f32 f30 = attr().field_0x40;
         cXyz sp48 = *mSph.GetTgRVecP();
         f32 f31 = sp48.abs2();
-        if (f31 > f30*f30) {
+        if (f31 > SQUARE(f30)) {
             sp48 *= f30 / std::sqrtf(f31);
         }
         cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();

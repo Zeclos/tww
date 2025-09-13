@@ -3,6 +3,7 @@
  * Mini-Boss - Big Octo (eye)
  */
 
+#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_daiocta_eye.h"
 #include "d/d_cc_d.h"
 #include "d/d_procname.h"
@@ -31,10 +32,10 @@ static dCcD_SrcSph l_sph_src = {
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGSphS
-    {
-        /* Center */ 0.0f, 0.0f, 0.0f,
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
         /* Radius */ 180.0f,
-    },
+    }},
 };
 
 
@@ -144,7 +145,7 @@ bool daDaiocta_Eye_c::_delete() {
 }
 
 /* 000017B4-000017D4       .text daDaiocta_EyeCreate__FPv */
-static s32 daDaiocta_EyeCreate(void* i_this) {
+static cPhs_State daDaiocta_EyeCreate(void* i_this) {
     return ((daDaiocta_Eye_c*)i_this)->_create();
 }
 
