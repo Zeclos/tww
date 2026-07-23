@@ -819,7 +819,7 @@ bool daNpcPhoto_c::_draw() {
             l_pso_photo.field_0x08
         );
         temp += current.pos;
-        obj.SetInf(5, this, l_pso_photo.field_0x16, l_pso_photo.field_0x17, 0x7FFF);
+        obj.SetInf(DSNAP_TYPE_UNK05, this, l_pso_photo.field_0x16, l_pso_photo.field_0x17, 0x7FFF);
         obj.SetGeo(temp, l_pso_photo.field_0x0C, l_pso_photo.field_0x10, l_pso_photo.field_0x14 + current.angle.y);
         dSnap_RegistSnapObj(obj);
     } else {
@@ -1468,7 +1468,7 @@ void daNpcPhoto_c::eventSetEyeInit() {
 /* 000030F0-000031F0       .text eventSetEye__12daNpcPhoto_cFv */
 bool daNpcPhoto_c::eventSetEye() {
     daPy_lk_c* link = daPy_getPlayerLinkActorClass();
-    s16 temp = link->shape_angle.y + cM_ssin(field_0x9B0) * 12288.0f;
+    s16 temp = link->shape_angle.y + cM_ssin(field_0x9B0) * 0x3000;
     field_0x9B0 += 0x400;
     mEyePos.x = 0.0f;
     mEyePos.y = 0.0f;

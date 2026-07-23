@@ -239,7 +239,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mEventFlags = 0;
     m148 = cSAngle::_0;
     m07C = 0;
-    m080 = cM_rndFX(32767.0f);
+    m080 = cM_rndFX(0x7FFF);
     m064 = 1.0f;
     m5F4 = 0.0f;
     mTrimHeight = 0.0f;
@@ -4461,7 +4461,7 @@ bool dCamera_c::nonOwnerCamera(s32 param_1) {
 
     if (m11C == 0) {
         mViewCache.mCenter = relationalPos(mpLockonTarget, &local_90);
-        mViewCache.mDirection.Val(f27, f26 * 182.04445f, directionOf(mpLockonTarget).Inv());
+        mViewCache.mDirection.Val(f27, DEG2S(f26), directionOf(mpLockonTarget).Inv());
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = f31;
         m100 = 1;
@@ -5414,7 +5414,7 @@ void view_setup(camera_process_class* i_this) {
     dComIfGd_setView(view);
 
     f32 far;
-    if (dComIfGp_getScopeMesgStatus() != 0) {
+    if (dComIfGp_getScopeMesgStatus() != fopMsgStts_MSG_UNK0_e) {
         far = view->mFar;
     } else {
         far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
