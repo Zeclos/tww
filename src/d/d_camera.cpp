@@ -2543,7 +2543,7 @@ void dCamera_c::checkGroundInfo() {
     mRoomNo = -1;
 
     if (mBG.m00.m00 && check_owner_action(mPadId, daPyStts0_SWIM_e)) {
-        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m00.m04.GetBgIndex(), mBG.m00.m04.GetPolyIndex());
+        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m00.m04);
     }
     else if (m360 == 0) {
         mRoomMapToolCameraIdx = 0x1ff;
@@ -2551,7 +2551,7 @@ void dCamera_c::checkGroundInfo() {
     else if (mBG.m5C.m00) {
         mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetRoomCamId(mBG.m5C.m04);
         if (mRoomMapToolCameraIdx == 0xff) {
-            mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m5C.m04.GetBgIndex(), mBG.m5C.m04.GetPolyIndex());
+            mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m5C.m04);
         }
         else {
             mRoomNo = dComIfG_Bgsp()->GetRoomId(mBG.m5C.m04);;
@@ -4897,7 +4897,6 @@ bool dCamera_c::letCamera(s32) {
 /* 8017B154-8017B18C       .text Set__9dCamera_cF4cXyz4cXyz */
 bool dCamera_c::Set(cXyz center, cXyz eye) {
     mCenter = center;
-
     mEye = eye;
 
     return TRUE;
@@ -4906,11 +4905,8 @@ bool dCamera_c::Set(cXyz center, cXyz eye) {
 /* 8017B18C-8017B1EC       .text Set__9dCamera_cF4cXyz4cXyzfs */
 bool dCamera_c::Set(cXyz center, cXyz eye, f32 fovY, s16 bank) {
     mCenter = center;
-
     mEye = eye;
-
     mFovy = fovY;
-
     mBank.Val(bank);
 
     return TRUE;
@@ -4919,11 +4915,8 @@ bool dCamera_c::Set(cXyz center, cXyz eye, f32 fovY, s16 bank) {
 /* 8017B1EC-8017B24C       .text Set__9dCamera_cF4cXyz4cXyzsf */
 bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
     mCenter = center;
-
     mEye = eye;
-
     mFovy = fovY;
-
     mBank.Val(bank);
 
     return TRUE;
@@ -4932,14 +4925,10 @@ bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
 /* 8017B24C-8017B31C       .text Reset__9dCamera_cF4cXyz4cXyzfs */
 bool dCamera_c::Reset(cXyz center, cXyz eye, f32 fovY, s16 bank) {
     mViewCache.mCenter = mCenter = center;
-
     mViewCache.mEye = mEye = eye;
-
     mViewCache.mFovy = mFovy = fovY;
-
     mBank = cSAngle(bank);
     mViewCache.mBank = mBank;
-
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return Reset();
@@ -4948,13 +4937,9 @@ bool dCamera_c::Reset(cXyz center, cXyz eye, f32 fovY, s16 bank) {
 /* 8017B31C-8017B3D8       .text Reset__9dCamera_cF4cXyz4cXyz */
 bool dCamera_c::Reset(cXyz center, cXyz eye) {
     mViewCache.mCenter = mCenter = center;
-
     mViewCache.mEye = mEye = eye;
-
     mViewCache.mFovy = mFovy;
-
     mViewCache.mBank = mBank;
-
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return Reset();
@@ -5604,7 +5589,7 @@ static cPhs_State camera_create(camera_class* i_this) {
 }
 
 /* 8017C9B0-8017C9DC       .text camera_delete__FP20camera_process_class */
-static bool camera_delete(camera_process_class* i_this) {
+static BOOL camera_delete(camera_process_class* i_this) {
     /* Nonmatching - fakematch, instruction swap */
     dCamera_c* camera = &i_this->mCamera;
     camera->~dCamera_c();
@@ -5612,7 +5597,7 @@ static bool camera_delete(camera_process_class* i_this) {
 }
 
 /* 8017C9DC-8017C9E4       .text is_camera_delete__FPv */
-static bool is_camera_delete(void*) {
+static BOOL is_camera_delete(void*) {
     return TRUE;
 }
 

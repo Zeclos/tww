@@ -82,8 +82,8 @@ public:
     void beginPatch();
     u32 endPatch();
 
-    u8* getDisplayList(int idx) const { return (u8*)mpData[idx]; }
-    u32 getDisplayListSize() const { return mSize; }
+    u8* getDisplayList(int idx) { return (u8*)mpData[idx]; }
+    u32 getDisplayListSize() { return mSize; }
 
     static GDLObj sGDLObj;
     static s32 sInterruptFlag;
@@ -98,7 +98,7 @@ public:
     J3DPacket() {
         mpNextPacket = NULL;
         mpFirstChild = NULL;
-        mpUserData = NULL;
+        mUserData = 0;
     }
 
     void addChildPacket(J3DPacket*);
@@ -111,8 +111,8 @@ public:
         mpFirstChild = NULL;
     }
 
-    void setUserArea(uintptr_t area) { mpUserData = area; }
-    uintptr_t getUserArea() const { return mpUserData; }
+    void setUserArea(uintptr_t area) { mUserData = area; }
+    uintptr_t getUserArea() const { return mUserData; }
 
     virtual bool isSame(J3DMatPacket*) const;
     virtual int entry(J3DDrawBuffer*);
@@ -122,7 +122,7 @@ public:
 public:
     /* 0x04 */ J3DPacket* mpNextPacket;
     /* 0x08 */ J3DPacket* mpFirstChild;
-    /* 0x0C */ uintptr_t mpUserData;
+    /* 0x0C */ uintptr_t mUserData;
 };  // Size: 0x10
 
 class J3DDrawPacket : public J3DPacket {
@@ -177,9 +177,8 @@ public:
     void setScaleFlagArray(u8* pScaleFlagArray) { mpScaleFlagArray = pScaleFlagArray; }
     void setCurrentViewNoPtr(u32* pCurrentViewNo) { mpCurrentViewNo = pCurrentViewNo; }
 
-    J3DShape* getShape() const { return mpShape; }
-    J3DModel* getModel() const { return mpModel; }
-    Mtx* getBaseMtxPtr() const { return mpBaseMtxPtr; }
+    J3DShape* getShape() { return mpShape; }
+    Mtx* getBaseMtxPtr() { return mpBaseMtxPtr; }
 
 public:
     /* 0x24 */ J3DShape* mpShape;

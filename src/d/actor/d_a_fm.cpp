@@ -1798,7 +1798,7 @@ void daFm_c::modeGrabFootDemo() {
                 }
             }
         } else {
-            fopAcM_orderOtherEvent2(this,"DEFAULT_FM_GRAB_FOOT", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "DEFAULT_FM_GRAB_FOOT");
         }
     }
 }
@@ -2066,7 +2066,7 @@ void daFm_c::modeGrabDemo() {
         }
     } else {
         if (isLink(mpActorTarget)) {
-            fopAcM_orderOtherEvent2(this, "DEFAULT_FM_GRAB", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "DEFAULT_FM_GRAB");
         }
         else {
             if (isNpc(mpActorTarget)) {
@@ -2074,10 +2074,10 @@ void daFm_c::modeGrabDemo() {
                 if (field_0x2E4 != 0) {
                     fopAcM_orderChangeEvent(this, "DEFAULT_FM_SUIKOMI_NPC", 0, 0xFFFF);
                 } else {
-                    fopAcM_orderOtherEvent2(this, "DEFAULT_FM_SUIKOMI_NPC", dEvtFlag_NOPARTNER_e);
+                    fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
                 }
 #else
-                fopAcM_orderOtherEvent2(this, "DEFAULT_FM_SUIKOMI_NPC", dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
 #endif
             }
         }
@@ -2180,7 +2180,7 @@ void daFm_c::modeGrabNpcDemo() {
     }
 #endif
     else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_FM_NPC_GRAB", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "DEFAULT_FM_NPC_GRAB");
     }
 }
 
@@ -2952,10 +2952,10 @@ int daFm_c::setRnd(int param_1, int param_2) {
 
 /* 00008044-00008114       .text setHoleEffect__6daFm_cFv */
 void daFm_c::setHoleEffect() {
-    if(mpFollowEcallBack.getEmitter() == NULL) {
-        dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PITFALL00, &current.pos, NULL, NULL, 0xFF, &mpFollowEcallBack, fopAcM_GetRoomNo(this));
+    if(mPtclFollowCb.getEmitter() == NULL) {
+        dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PITFALL00, &current.pos, NULL, NULL, 0xFF, &mPtclFollowCb, fopAcM_GetRoomNo(this));
     }
-    JPABaseEmitter* emitter = mpFollowEcallBack.getEmitter();
+    JPABaseEmitter* emitter = mPtclFollowCb.getEmitter();
     
     if(emitter != NULL) {
         Vec scale = {field_0x3E0, field_0x3E0, field_0x3E0};
@@ -2972,7 +2972,7 @@ void daFm_c::holeExecute() {
         setHoleEffect();
     } else {
         fopAcM_ClearStatusMap(this);
-        mpFollowEcallBack.end();
+        mPtclFollowCb.end();
     }
 }
 
@@ -3434,7 +3434,7 @@ cPhs_State daFm_c::_create() {
 bool daFm_c::_delete() {
     cancelGrab();
     dComIfG_resDelete(&mPhs, m_arc_name);
-    mpFollowEcallBack.remove();
+    mPtclFollowCb.remove();
 #if VERSION > VERSION_DEMO
     if(heap != NULL) {
         mpMorf->stopZelAnime();

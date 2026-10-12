@@ -557,7 +557,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kankyo_wether.cpp"),
             Object(NonMatching, "d/d_kankyo_rain.cpp"),
             Object(Matching,    "d/d_kankyo_demo.cpp"),
-            Object(NonMatching, "d/d_detect.cpp"),
+            Object(MatchingFor("GZLE01"), "d/d_detect.cpp"),
             Object(Matching,    "d/d_vibration.cpp"),
             Object(Matching,    "d/d_vib_pattern.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_attention.cpp"),
@@ -614,7 +614,7 @@ config.libs = [
             Object(NonMatching, "d/actor/d_a_himo2.cpp"),
             Object(Matching,    "d/actor/d_a_hookshot.cpp"),
             Object(Matching,    "d/actor/d_a_ib.cpp"),
-            Object(NonMatching, "d/actor/d_a_item.cpp"),
+            Object(Matching,    "d/actor/d_a_item.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_itembase.cpp"),
             Object(Matching,    "d/actor/d_a_nh.cpp"),
             Object(Matching,    "d/actor/d_a_npc_fa1.cpp"),
@@ -640,10 +640,10 @@ config.libs = [
             Object(Matching,    "d/d_letter.cpp"),
             Object(Matching,    "d/d_level_se.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_cloth.cpp"),
-            Object(NonMatching, "d/d_menu_collect.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_collect.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_dmap.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_fmap.cpp"),
-            Object(NonMatching, "d/d_menu_fmap2.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_fmap2.cpp"),
             Object(NonMatching, "d/d_menu_item.cpp"),
             Object(Matching,    "d/d_menu_option.cpp"),
             Object(Matching,    "d/d_menu_save.cpp"),
@@ -666,9 +666,9 @@ config.libs = [
             Object(NonMatching, "d/d_picture_box.cpp"),
             Object(Matching,    "d/d_s_logo.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_menu.cpp"),
-            Object(EquivalentFor("D44J01", "GZLJ01", "GZLE01"),    "d/d_s_name.cpp"), # stripped vtable padding
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_open.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_s_open_sub.cpp"),
+            Object(Matching,    "d/d_s_name.cpp"),
+            Object(Matching,    "d/d_s_open.cpp"),
+            Object(Matching,    "d/d_s_open_sub.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_play.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_room.cpp"),
             Object(Matching,    "d/d_s_title.cpp"),
@@ -918,7 +918,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JMessage/data.cpp"),
             Object(Matching,    "JSystem/JMessage/control.cpp"),
-            Object(NonMatching, "JSystem/JMessage/processor.cpp"),
+            Object(MatchingFor("GZLE01"), "JSystem/JMessage/processor.cpp"),
             Object(NonMatching, "JSystem/JMessage/resource.cpp"),
         ],
     ),
@@ -999,6 +999,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JSupport/JSUList.cpp"),
             Object(Matching,    "JSystem/JSupport/JSUInputStream.cpp"),
+            Object(DEBUG_ONLY,  "JSystem/JSupport/JSUOutputStream.cpp"),
             Object(Matching,    "JSystem/JSupport/JSUMemoryStream.cpp"),
             Object(Matching,    "JSystem/JSupport/JSUFileStream.cpp"),
         ],
@@ -1105,6 +1106,23 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JMath/JMath.cpp"),
             Object(Matching,    "JSystem/JMath/random.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JHostIO",
+        [
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIComm.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHICommonMem.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORServer.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JOREntry.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORFile.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORMessageBox.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORHostInfo.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORShellExecute.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIMemBuf.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIhioASync.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIMccBuf.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIRMcc.cpp"),
         ],
     ),
     DolphinLib(
@@ -1242,6 +1260,12 @@ config.libs = [
             Object(Matching, "dolphin/card/CARDWrite.c"),
             Object(Matching, "dolphin/card/CARDStat.c"),
             Object(Matching, "dolphin/card/CARDNet.c"),
+        ],
+    ),
+    DolphinLib(
+        "hio",
+        [
+            Object(Matching, "dolphin/hio/hio.c"),
         ],
     ),
     DolphinLib(
@@ -1590,7 +1614,7 @@ config.libs = [
     ActorRel(Matching, "d_a_obj_majyuu_door"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swhammer"),
+    ActorRel(Matching,    "d_a_obj_swhammer"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swheavy"),
     ActorRel(Matching,    "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
@@ -1639,7 +1663,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_deku_item"),
     ActorRel(Matching,    "d_a_dk"),
     ActorRel(Matching,    "d_a_dummy"),
-    ActorRel(NonMatching, "d_a_fallrock_tag"),
+    ActorRel(Matching,    "d_a_fallrock_tag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fan"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fganon"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_fgmahou"),
@@ -1651,7 +1675,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_gy"),
     ActorRel(NonMatching, "d_a_icelift"),
     ActorRel(Matching,    "d_a_kb"),
-    ActorRel(NonMatching, "d_a_kddoor"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_kddoor"),
     ActorRel(Matching,    "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
     ActorRel(Matching,    "d_a_kmon"),
@@ -1676,9 +1700,9 @@ config.libs = [
     ActorRel(Matching,    "d_a_npc_bm1"),
     ActorRel(NonMatching, "d_a_npc_bmcon1"),
     ActorRel(NonMatching, "d_a_npc_bms1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_bmsw"),
+    ActorRel(Matching,    "d_a_npc_bmsw"),
     ActorRel(Matching,    "d_a_npc_bs1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_btsw"),
+    ActorRel(Matching,    "d_a_npc_btsw"),
     ActorRel(Matching,    "d_a_npc_btsw2"),
     ActorRel(NonMatching, "d_a_npc_co1"),
     ActorRel(NonMatching, "d_a_npc_de1"),
@@ -1695,7 +1719,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_kg1"),
     ActorRel(NonMatching, "d_a_npc_kg2"),
     ActorRel(NonMatching, "d_a_npc_kk1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_km1"),
+    ActorRel(Matching,    "d_a_npc_km1"),
     ActorRel(NonMatching, "d_a_npc_ko1"),
     ActorRel(NonMatching, "d_a_npc_kp1"),
     ActorRel(Matching,    "d_a_npc_ls1"),
@@ -1704,7 +1728,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_npc_mt"),
     ActorRel(Matching,    "d_a_npc_nz"),
     ActorRel(NonMatching, "d_a_npc_ob1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_os"),
+    ActorRel(Matching,    "d_a_npc_os"),
     ActorRel(Matching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc
@@ -1778,9 +1802,9 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_mknjd"),
     ActorRel(Matching,    "d_a_obj_mmrr"),
     ActorRel(NonMatching, "d_a_obj_msdan"),
-    ActorRel(NonMatching, "d_a_obj_msdan2"),
+    ActorRel(Matching,    "d_a_obj_msdan2"),
     ActorRel(Matching,    "d_a_obj_msdan_sub"),
-    ActorRel(NonMatching, "d_a_obj_msdan_sub2"),
+    ActorRel(Matching,    "d_a_obj_msdan_sub2"),
     ActorRel(Matching,    "d_a_obj_mtest"),
     ActorRel(Matching,    "d_a_obj_nest"),
     ActorRel(Matching,    "d_a_obj_ojtree"),
@@ -1806,7 +1830,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_vmsms"),
     ActorRel(Matching,    "d_a_obj_volcano"),
     ActorRel(NonMatching, "d_a_obj_vtil"),
-    ActorRel(NonMatching, "d_a_obj_vyasi"),
+    ActorRel(Matching,    "d_a_obj_vyasi"),
     ActorRel(Matching,    "d_a_obj_xfuta"),
     ActorRel(Matching,    "d_a_obj_zouK"),
     ActorRel(Matching,    "d_a_oship"),
@@ -1823,7 +1847,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_steam_tag"),
     ActorRel(Matching,    "d_a_swattack"),
     ActorRel(Matching,    "d_a_switem"),
-    ActorRel(NonMatching, "d_a_swpropeller"),
+    ActorRel(Matching,    "d_a_swpropeller"),
     ActorRel(Matching,    "d_a_swtact"),
     ActorRel(Matching,    "d_a_tag_etc"),
     ActorRel(Matching,    "d_a_tag_island"),
@@ -1937,10 +1961,24 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("JSystem/JSupport/JSUMemoryStream.cpp"), "JSystem/JSupport/JSUOutputStream.cpp")
         objects.insert(objects.index("JSystem/JGadget/binary.cpp"), "JSystem/JGadget/define.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIComm.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHICommonMem.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORServer.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JOREntry.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORFile.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORMessageBox.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORHostInfo.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORShellExecute.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIMemBuf.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIhioASync.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIMccBuf.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIRMcc.cpp")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/i2c.c")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/initphilips.c")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/gpioexi.c")
+        objects.insert(objects.index("dolphin/gx/GXInit.c"), "dolphin/hio/hio.c")
         objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
 
     # Example of adding new files for modding:

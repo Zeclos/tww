@@ -282,14 +282,12 @@ void dMenu_Dmap_c::screenSet() {
     }
 
     J2DWindow::TContentsColor contentsColor;
-    J2DWindow* win = (J2DWindow*)mFbPanes[0].pane;
-    win->getContentsColor(contentsColor);
+    ((J2DWindow*)mFbPanes[0].pane)->getContentsColor(contentsColor);
     mFb0ContentsColor = contentsColor.mTL;
     mFb0White.set(((J2DWindow*)mFbPanes[0].pane)->mWhite);
     mFb0Black.set(((J2DWindow*)mFbPanes[0].pane)->mBlack);
 
-    win = (J2DWindow*)mFbPanes[5].pane;
-    win->getContentsColor(contentsColor);
+    ((J2DWindow*)mFbPanes[5].pane)->getContentsColor(contentsColor);
     mFb5ContentsColor = contentsColor.mTL;
     mFb5White.set(((J2DWindow*)mFbPanes[5].pane)->mWhite);
     mFb5Black.set(((J2DWindow*)mFbPanes[5].pane)->mBlack);
@@ -1586,7 +1584,7 @@ void dMenu_Dmap_c::itemnoteSet() {
 #if VERSION > VERSION_DEMO
         u32 color = mMsgProc.getIconColor(i);
         if (color == 0xFFFFFFFF) {
-            color = 0xFF;
+            color = 0x000000FF;
         }
 #endif
         if (iconNo == 0xFF) {
